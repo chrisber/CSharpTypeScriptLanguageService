@@ -36,6 +36,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Folder Include="TypeScript\" />
+    <Folder Include="TypeScript\**\*" />
   </ItemGroup>
 </Project>
