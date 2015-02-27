@@ -33,9 +33,15 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TypeScriptCompilerEnvironment.cs" />
+    <Compile Include="TypeScriptHostTypes.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Folder Include="TypeScript\**\*" />
+    <None Include="def.ts" />
+    <None Include="lib.d.ts" />
+    <None Include="navigation.js" />
+    <None Include="semanticDiagnostic.js" />
+    <None Include="typescriptServices.js" />
   </ItemGroup>
 </Project>
