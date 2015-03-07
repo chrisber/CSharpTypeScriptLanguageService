@@ -11,39 +11,34 @@ namespace TypeScriptLanguageServiceTranspiler
     {
         V8Engine v8Engine = null;
         TypeScriptServiceHostEnvironment host = null;
-        char dS = Path.DirectorySeparatorChar;
-        string assemblyFolder = null;
-        string servicesTsPath = null;
-        string typesTsPath = null;
-
+        Utilities utilities = null;
+       
 
         public Transpiler()
         {
+            utilities = new Utilities();
             v8Engine = new  V8Engine();
             host = new TypeScriptServiceHostEnvironment();
             v8Engine.RegisterType<TypeScriptServiceHostEnvironment>(null, recursive: true);
             v8Engine.GlobalObject.SetProperty("host", host);
 
-            assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-
-
-            servicesTsPath = Path.Combine(
-                assemblyFolder, 
-                ".." + dS + ".." + dS + ".." + dS + "/TypeScript/src/services/services.ts"
-            );
-            servicesTsPath = Path.GetFullPath(servicesTsPath);
-
-            typesTsPath = Path.Combine(
-                assemblyFolder,
-                ".." + dS + ".." + dS + ".." + dS + "/TypeScript/src/compiler/types.ts"
-            );
-            typesTsPath = Path.GetFullPath(typesTsPath);
+        }
+        public List<string> testme(){
+            List<string> list = new List<string>();
+            list.Add(utilities.ExecDir);
+            list.Add(utilities.CompilerDirPath);
+            list.Add(utilities.CompilerTypesScriptPath);
+            list.Add(utilities.LibdtsScriptPath);
+            list.Add(utilities.ServiceDirPath);
+            list.Add(utilities.ServiceScriptPath);
+            list.Add(utilities.TypeScriptServicesScriptPath);
+            return list;
         }
 
         public void addRequiredScriptsToHost()
         {
             //add all files
-            List<string> filesPaths = Utilities.DirSearch(".." + dS + ".." + dS + ".." + dS + "/TypeScript/src/services");
+            List<string> filesPaths = utilities.DirSearch(utilities.ServiceDirPath);
             filesPaths.ForEach(x =>
                 {
                     var fileScript = new Script(x, File.ReadAllText(x));                   
@@ -66,7 +61,7 @@ namespace TypeScriptLanguageServiceTranspiler
                 "types.ts",
                 "utilities.ts"
             };
-            filesPaths = Utilities.SearchFile(".." + dS + ".." + dS + ".." + dS + "/TypeScript/src/compiler", fileNames);
+            filesPaths = utilities.SearchFile(utilities.CompilerDirPath, fileNames);
             filesPaths.ForEach(x =>
                 {
                     var fileScript = new Script(x, File.ReadAllText(x));                   
@@ -75,15 +70,15 @@ namespace TypeScriptLanguageServiceTranspiler
 //
 //            //create typedef script
             Script libdef = new Script(
-                Path.Combine(assemblyFolder, "lib.d.ts"), 
-                File.ReadAllText( Path.Combine(assemblyFolder, "lib.d.ts"))
+                utilities.LibdtsScriptPath, 
+                File.ReadAllText( utilities.LibdtsScriptPath )
             );
             host.scripts.Add(libdef.Id, libdef);
         }
 
         public void initTypescriptLanguageService(){
-            var servicesScript = File.ReadAllText(Path.Combine(assemblyFolder, "typescriptServices.js"));
-            var result = v8Engine.Execute(servicesScript);
+            var languageServicesScript = File.ReadAllText(utilities.TypeScriptServicesScriptPath);
+            var result = v8Engine.Execute(languageServicesScript);
             Console.WriteLine(result.ToString());
             //create languageservice
             var mainScript = @"﻿var ls = ts.createLanguageService(host, ts.createDocumentRegistry())";
@@ -91,7 +86,7 @@ namespace TypeScriptLanguageServiceTranspiler
             Console.WriteLine(result.ToString());
         }
 
-        public List<KeyValuePair<string,List<KeyValuePair<string,string>>>> getInterfaces(string interfaceString){
+        private List<KeyValuePair<string,List<KeyValuePair<string,string>>>> getInterfaces(string interfaceString){
             JObject jobjectServiceInterfaces = JObject.Parse(interfaceString);
             List<KeyValuePair<string,List<KeyValuePair<string,string>>>> interfaceList = 
                 new List<KeyValuePair<string,List<KeyValuePair<string,string>>>>();
@@ -113,11 +108,31 @@ namespace TypeScriptLanguageServiceTranspiler
             return interfaceList;
         }
 
+        private List<KeyValuePair<string,List<string>>> getEnums(string enumString){
+            JObject jobjectServiceEnums = JObject.Parse(enumString);
+            List<KeyValuePair<string,List<string>>> enumList = 
+                new List<KeyValuePair<string,List<string>>>();
+            foreach (JToken content in jobjectServiceEnums["enums"].Children())
+            {
+                var enumName = content.Value<JProperty>().Name;
+                List<string> enumMemberList = new List<string>();
+                foreach (JToken member in content.Value<JProperty>().Value.Children())
+                {   
+                    var cleanMember = member.Value<string>().Replace("\"","").Replace(" ","").Replace(";","");
+                    enumMemberList.Add(cleanMember);
+                }
+                KeyValuePair<string,List<string>> tsInterface = 
+                    new KeyValuePair<string,List<string>>(enumName,enumMemberList);
+                enumList.Add(tsInterface);
+            }
+            return enumList;
+        }
+
         public List<KeyValuePair<string,List<KeyValuePair<string,string>>>> getServiceInterfaces(){
             host.position = 1;
             host.isMemberCompletion = false;
-            host.fileName = servicesTsPath; 
-            var script = File.ReadAllText(assemblyFolder + Path.DirectorySeparatorChar + "getInterfaces.js");
+            host.fileName = utilities.ServiceScriptPath; 
+            var script = File.ReadAllText(utilities.InterfacesScript);
             var tsServiceInterfaces = v8Engine.Execute(script);
             return getInterfaces(tsServiceInterfaces);
         }
@@ -125,11 +140,29 @@ namespace TypeScriptLanguageServiceTranspiler
         public List<KeyValuePair<string,List<KeyValuePair<string,string>>>> getCompilerInterfaces(){
             host.position = 1;
             host.isMemberCompletion = false;
-            host.fileName = typesTsPath;
-            var script = File.ReadAllText(assemblyFolder + Path.DirectorySeparatorChar + "getInterfaces.js");
+            host.fileName = utilities.CompilerTypesScriptPath;
+            var script = File.ReadAllText(utilities.InterfacesScript);
             var compilerInterfaces = v8Engine.Execute(script);
             return getInterfaces(compilerInterfaces);
         }
+
+        public List<KeyValuePair<string,List<string>>> getServiceEnums(){
+            host.position = 1;
+            host.isMemberCompletion = false;
+            host.fileName = utilities.ServiceScriptPath; 
+            var script = File.ReadAllText(utilities.EnumsScript);
+            var tsServiceEnums = v8Engine.Execute(script);
+            return getEnums(tsServiceEnums);
+        }
+        public List<KeyValuePair<string,List<string>>> getCompilerEnums(){
+            host.position = 1;
+            host.isMemberCompletion = false;
+            host.fileName = utilities.CompilerTypesScriptPath; 
+            var script = File.ReadAllText(utilities.EnumsScript);
+            var tsServiceEnums = v8Engine.Execute(script);
+            return getEnums(tsServiceEnums);
+        }
+
 
 
     }

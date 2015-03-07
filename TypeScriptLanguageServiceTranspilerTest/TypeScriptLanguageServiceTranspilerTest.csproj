@@ -3,10 +3,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B3FF98B1-B867-4D05-BDE6-7B602BEEE9BB}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>TypeScriptLanguageServiceTranspiler</RootNamespace>
-    <AssemblyName>TypeScriptLanguageServiceTranspiler</AssemblyName>
+    <ProjectGuid>{EFE99181-EA84-478B-AAA3-629CC58EF17F}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>TypeScriptLanguageServiceTranspilerTest</RootNamespace>
+    <AssemblyName>TypeScriptLanguageServiceTranspilerTest</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -29,6 +29,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="V8.Net">
       <HintPath>..\V8dotnet\linux.x64\V8.Net.dll</HintPath>
     </Reference>
@@ -38,49 +41,19 @@
     <Reference Include="V8.Net.SharedTypes">
       <HintPath>..\V8dotnet\linux.x64\V8.Net.SharedTypes.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TypeScriptHostTypes.cs" />
-    <Compile Include="TypeScriptServiceHostEnvironment.cs" />
-    <Compile Include="Utilities\Utilities.cs" />
-    <Compile Include="Transpiler.cs" />
-    <Compile Include="T4Templates\InterfacesTranspiler.cs">
-      <DependentUpon>InterfacesTranspiler.tt</DependentUpon>
-    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Content Include="..\V8dotnet\linux.x64\libV8_Net_Proxy.so">
-      <Link>libV8_Net_Proxy.so</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="typescriptServices.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib.d.ts">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="getInterfaces.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="getEnums.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Utilities\" />
-    <Folder Include="T4Templates\" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
-    <None Include="T4Templates\InterfacesTranspiler.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>InterfacesTranspiler.cs</LastGenOutput>
-    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TypeScriptLanguageServiceTranspiler\TypeScriptLanguageServiceTranspiler.csproj">
+      <Project>{B3FF98B1-B867-4D05-BDE6-7B602BEEE9BB}</Project>
+      <Name>TypeScriptLanguageServiceTranspiler</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

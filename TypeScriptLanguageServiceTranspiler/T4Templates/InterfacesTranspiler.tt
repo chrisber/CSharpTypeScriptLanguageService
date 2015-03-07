@@ -1,27 +1,149 @@
-﻿<#@ template language="C#" debug="true"  #>
+﻿<#@ template language="C#" #>
 <#@ assembly name="System.Core" #>
+<#@ assembly name="$(SolutionDir)/TypeScriptLanguageServiceTranspiler/bin/Debug/TypeScriptLanguageServiceTranspiler.dll" #>
+
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Text" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Reflection" #>
 <#@ import namespace="System.Collections.Generic" #>
-<#@ assembly name="$(SolutionDir)/TypeScriptLanguageServiceTranspiler/bin/Debug/TypeScriptLanguageServiceTranspiler.dll" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
 <#@ import namespace="TypeScriptLanguageServiceTranspiler" #>
+	<# 
+	                Transpiler transpiler = new Transpiler();
+	                transpiler.addRequiredScriptsToHost();
+	                var test = transpiler.testme();
+	                transpiler.initTypescriptLanguageService();
 
-<# 
-    Transpiler transpiler = new Transpiler();
-    transpiler.addRequiredScriptsToHost();
-    transpiler.initTypescriptLanguageService();
-    List<KeyValuePair<string,List<KeyValuePair<string,string>>>> interfaces = transpiler.getServiceInterfaces();
-#>
-<#
-    foreach (var tsInterface in interfaces)
+	                List<KeyValuePair<string,List<string>>> serviceEnums = transpiler.getServiceEnums();
+	                List<KeyValuePair<string,List<string>>> compilerEnums = transpiler.getCompilerEnums();
+	                List<List<KeyValuePair<string,List<string>>>> enumList = 
+	                new List<List<KeyValuePair<string,List<string>>>>();
+	                enumList.Add(compilerEnums);
+	                enumList.Add(serviceEnums);
+
+	                List<List<KeyValuePair<string,List<KeyValuePair<string,string>>>>> interfaceList = 
+	                new List<List<KeyValuePair<string,List<KeyValuePair<string,string>>>>> ();
+
+	                List<KeyValuePair<string,List<KeyValuePair<string,string>>>> serviceInterfaces = transpiler.getServiceInterfaces();
+	                List<KeyValuePair<string,List<KeyValuePair<string,string>>>> compilerInterfaces = transpiler.getCompilerInterfaces();
+	                var itemToRemove = compilerInterfaces.Single(r => r.Key == "SourceFile");
+			compilerInterfaces.Remove(itemToRemove);
+
+	                interfaceList.Add(compilerInterfaces);
+	                interfaceList.Add(serviceInterfaces);
+	            
+	#>
+//interfaces
+using System;
+using System.Collections.Generic;
+
+namespace CSharpTypeScriptLanguageServices { 
+	<# 
+	foreach ( var enums in enumList) 
+	   {
+		foreach ( var tsEnum in enums) 
+		{
+
+	#>
+
+			[Flags]
+			public enum <#= tsEnum.Key #> {
+	<#
+				foreach ( var member in tsEnum.Value) 
+				{
+				var m = member.Replace("$","dollar");
+				m = Regex.Replace(m, @"\boperator\b", "tsOperator");
+				m = Regex.Replace(m, @"\bType\b", "tsType");
+	#>				<#= m #>,	
+	<#			}
+	#>
+			}
+	<#
+		}
+	   }
+	#>
+
+
+	<# 
+	foreach ( var interfaces in interfaceList) 
+	{
+		foreach (var tsInterface in interfaces)
+		{
+		    if (tsInterface.Value.Count > 0)
+		    {
+	#>  
+	    interface <#= tsInterface.Key #> {  
+		    <#
+		        foreach (var interfaceMember in tsInterface.Value)
+		        {
+		        	var type = interfaceMember.Key.Replace("boolean","bool")
+		        				.Replace("number","int")
+		        				.Replace("|","")
+		        				.Replace("any","object")
+		        				.Replace("Map<Symbol>","object")
+		        				.Replace("Map<int>","object")
+		        				.Replace("Map<string>","object")
+		        				.Replace("Map<bool>","object")
+		        				.Replace("Map<bool>","object")
+		        				.Replace("Map<TypeReference>","object")
+		        				.Replace("stringobject","object")
+		        				.Replace("WriteFileCallback","object");
+
+
+
+				type = Regex.Replace(type, @"\bEntityName\b", "object");
+				type = Regex.Replace(type, @"\bDeclarationName\b", "object");
+				type = Regex.Replace(type, @"\bIdentifierBindingPattern\b", "object");
+				type = Regex.Replace(type, @"\bBlockExpression\b", "object");
+				type = Regex.Replace(type, @"\bLiteralExpressionTemplateExpression\b", "object");
+				type = Regex.Replace(type, @"\bVariableDeclarationListExpression\b", "object");
+				type = Regex.Replace(type, @"\bCaseOrDefaultClause\b", "object");
+				type = Regex.Replace(type, @"\bIdentifierLiteralExpression\b", "object");
+				type = Regex.Replace(type, @"\bModuleBlockModuleDeclaration\b", "object");
+				type = Regex.Replace(type, @"\bEntityNameExternalModuleReference\b", "object");
+				type = Regex.Replace(type, @"\bNamespaceImportNamedImports\b", "object");
+				type = Regex.Replace(type, @"\boperator\b", "object");
+				type = Regex.Replace(type, @"\bNamedExports\b", "object");
+				type = Regex.Replace(type, @"\bObjectType\b", "object");
+				type = Regex.Replace(type, @"\bstringDiagnosticMessageChain\b", "object");
+				type = Regex.Replace(type, @"\bTypeChecker\b", "object");
+
+
+
+
+		        	
+		        	
+				var name = interfaceMember.Value.Replace("?","");
+		          	name = Regex.Replace(name, @"\bout\b", "tsOut");
+				name = Regex.Replace(name, @"\boperator\b", "tsOperator");
+
+		    #>
+		          <#= type #> <#= name #>  { get; set; }
+		    <#
+		        }
+		    #>
+	    } 
+	<#
+		   }
+		}
+	}
+	#> 
+
+    interface SymbolTable {
+	string[] Symbol { get; set; }
+    }
+
+    interface IScriptSnapshot
     {
-        if (tsInterface.Value.Count > 0)
-        {
-            #> interface <#= tsInterface.Key #> { 
-            <# foreach (var interfaceMember in tsInterface.Value)
-            {
-             #> public  <#= interfaceMember.Key #>  <#= interfaceMember.Value #> { get; set; } <#
-            }
-        }
-    }#>
- 		}    
+        string getText(int start, int end);
+        int getLength();
+        int[] getLineStartPositions();
+        TextChangeRange getChangeRange(IScriptSnapshot oldSnapshot);
+    }
+
+    interface TypeMapper {
+        object Type { get; set; }
+    }
+}
+
