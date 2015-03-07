@@ -2,7 +2,7 @@
 using V8.Net;
 using System.Collections.Generic;
 
-namespace TypeScriptLanguageServiceGenerator
+namespace TypeScriptLanguageServiceTranspiler
 {
    
 
@@ -13,11 +13,12 @@ namespace TypeScriptLanguageServiceGenerator
         Asynchronous = 2,
     }
 
-        public enum ModuleKind {
-            None,
-            CommonJS,
-            AMD,
-        }
+    public enum ModuleKind
+    {
+        None,
+        CommonJS,
+        AMD,
+    }
 
     public enum ScriptTarget
     {
@@ -132,8 +133,11 @@ namespace TypeScriptLanguageServiceGenerator
     public interface IScriptSnapshotShim
     {
         string getText(int start, int end);
+
         int getLength();
+
         int[] getLineStartPositions();
+
         TextChangeRange getChangeRange(IScriptSnapshotShim oldSnapshot);
     }
 
@@ -150,19 +154,19 @@ namespace TypeScriptLanguageServiceGenerator
             this.script = script;
         }
 
-        [ScriptMember (inScriptName: "getText", security: ScriptMemberSecurity.Permanent)]
+        [ScriptMember(inScriptName: "getText", security: ScriptMemberSecurity.Permanent)]
         public string getText(int start, int end)
         {
             return script.Source.Substring(start, end - start);
         }
 
-        [ScriptMember (inScriptName: "getLength", security: ScriptMemberSecurity.Permanent)]
+        [ScriptMember(inScriptName: "getLength", security: ScriptMemberSecurity.Permanent)]
         public int getLength()
         {
             return script.Source.Length;
         }
 
-        [ScriptMember (inScriptName: "getLineStartPositions", security: ScriptMemberSecurity.Permanent)]
+        [ScriptMember(inScriptName: "getLineStartPositions", security: ScriptMemberSecurity.Permanent)]
         public int[] getLineStartPositions()
         {
             Log("ScriptSnapshotShim.getLineStartPositions");
@@ -178,7 +182,7 @@ namespace TypeScriptLanguageServiceGenerator
         /// <summary>
         /// TODO: Fix this
         /// </summary>
-        [ScriptMember (inScriptName: "getChangeRange", security: ScriptMemberSecurity.Permanent)]
+        [ScriptMember(inScriptName: "getChangeRange", security: ScriptMemberSecurity.Permanent)]
         public TextChangeRange getChangeRange(IScriptSnapshotShim oldSnapshot)
         {
             //            Log("ScriptSnapshotShim.getChangeRange: version={0}", oldSnapshot);
@@ -193,7 +197,7 @@ namespace TypeScriptLanguageServiceGenerator
             return null;
         }
 
-        [ScriptMember (inScriptName: "Log", security: ScriptMemberSecurity.Permanent)]
+        [ScriptMember(inScriptName: "Log", security: ScriptMemberSecurity.Permanent)]
         void Log(string format, params object[] args)
         {
             Console.WriteLine(String.Format(format, args));
@@ -223,20 +227,24 @@ namespace TypeScriptLanguageServiceGenerator
             Version++;
         }
 
-        public string Id {
+        public string Id
+        {
             get { return fileName; }
         }
 
         public string Source { get; private set; }
+
         public int Version { get; private set; }
 
         public int[] GetLineStartPositions()
         {
-            if (lineStartPositions.Count == 0) {
+            if (lineStartPositions.Count == 0)
+            {
                 string[] lines = Source.Split('\r');
                 lineStartPositions.Add(0);
                 int position = 0;
-                for (int i = 0; i < lines.Length; ++i) {
+                for (int i = 0; i < lines.Length; ++i)
+                {
                     position += lines[i].Length + 2;
                     lineStartPositions.Add(position);
                 }
@@ -265,6 +273,7 @@ namespace TypeScriptLanguageServiceGenerator
         }
 
         public TextSpan span { get; set; }
+
         public int newLength { get; set; }
     }
 
@@ -277,6 +286,7 @@ namespace TypeScriptLanguageServiceGenerator
         }
 
         public int start { get; set; }
+
         public int length { get; set; }
     }
 }

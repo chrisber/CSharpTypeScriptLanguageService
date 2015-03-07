@@ -1,0 +1,27 @@
+﻿<#@ template language="C#" debug="true"  #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ assembly name="$(SolutionDir)/TypeScriptLanguageServiceTranspiler/bin/Debug/TypeScriptLanguageServiceTranspiler.dll" #>
+<#@ import namespace="TypeScriptLanguageServiceTranspiler" #>
+
+<# 
+    Transpiler transpiler = new Transpiler();
+    transpiler.addRequiredScriptsToHost();
+    transpiler.initTypescriptLanguageService();
+    List<KeyValuePair<string,List<KeyValuePair<string,string>>>> interfaces = transpiler.getServiceInterfaces();
+#>
+<#
+    foreach (var tsInterface in interfaces)
+    {
+        if (tsInterface.Value.Count > 0)
+        {
+            #> interface <#= tsInterface.Key #> { 
+            <# foreach (var interfaceMember in tsInterface.Value)
+            {
+             #> public  <#= interfaceMember.Key #>  <#= interfaceMember.Value #> { get; set; } <#
+            }
+        }
+    }#>
+ 		}    
