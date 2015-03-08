@@ -1,0 +1,190 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="$(SolutionDir)/TypeScriptLanguageServiceTranspiler/bin/Debug/TypeScriptLanguageServiceTranspiler.dll" #>
+
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Reflection" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
+<#@ import namespace="TypeScriptLanguageServiceTranspiler" #>
+<# 
+        Transpiler transpiler = new Transpiler();
+        transpiler.addRequiredScriptsToHost();
+        transpiler.initTypescriptLanguageService();
+        List<KeyValuePair<string,List<KeyValuePair<string,string>>>> methods = transpiler.getServiceMethods();
+#>
+
+
+﻿using System;
+using V8.Net;
+using System.Diagnostics;
+namespace CSharpTypeScriptLanguageServices { 
+
+
+	public class TypeScriptLanguageServices {
+
+	V8Engine v8Engine = null;
+	TypeScriptServiceHostEnvironment v8Host = null;
+	Utilities utilities = null;
+	InternalHandle languageService = null;
+
+	public TypeScriptLanguageServices()
+	{
+		v8Host = new TypeScriptServiceHostEnvironment();
+
+		try
+		{   //init V8Engine
+			v8Engine = new V8Engine();
+			//Add the ServiceShimHost to the v8 global context
+			v8Engine.RegisterType<TypeScriptServiceHostEnvironment>(null, recursive: true);
+			v8Engine.GlobalObject.SetProperty("host", v8Host);
+			//Execute typescript.ts
+			string serviceScriptHandle = v8Engine.Compile("");
+			v8Engine.Execute(serviceScriptHandle);
+			languageService = v8Engine.GlobalObject.GetProperty("languageService");
+			utilities = new Utilities();
+		}
+		catch (Exception ex)
+		{
+			log(ex.ToString());
+			throw new Exception(ex.ToString());
+		}
+
+	}
+
+
+<#  
+	foreach ( var method in methods) {
+		var signature = "";
+		var parameterLength = method.Value.Count;
+		int lastItem = method.Value.Count -1;
+		var returnParameterType = method.Value[lastItem].Key;
+		var methodName = method.Key;
+		returnParameterType = returnParameterType.Replace("number","int").Replace("boolean","bool").Replace("?","");
+		method.Value.RemoveAt(lastItem);
+
+		foreach ( var parameter in method.Value) 
+		{	
+			signature = signature + " " + parameter.Key + " " + parameter.Value + ",";
+		}
+		signature = signature.TrimEnd(',');
+		
+
+#>
+
+		public <#= returnParameterType #>  <#= methodName #> ( <#= signature  #>) {
+<#
+			foreach ( var parameter in method.Value) {
+				if( parameter.Key.Contains("string") ||  parameter.Key.Contains("bool") ||  parameter.Key.Contains("int")){
+#>
+
+				Handle <#=parameter.Value#>Handle = v8Engine.CreateValue(<#=parameter.Value#>);
+<#
+				}
+				if( parameter.Key.Contains("TextSpan")){
+#>
+
+				V8NativeObject <#=parameter.Value#>Handle = v8Engine.CreateObject<V8NativeObject>();
+				<#=parameter.Value#>Handle.SetProperty("start", v8Engine.CreateValue(<#=parameter.Value#>.start));
+				<#=parameter.Value#>Handle.SetProperty("length", v8Engine.CreateValue(<#=parameter.Value#>.length));
+				v8Engine.GlobalObject.SetProperty("textspan", <#=parameter.Value#>Handle);
+
+<#
+				}
+				if( parameter.Key.Contains("EditorOptions")){
+#>
+
+				V8NativeObject <#=parameter.Value#>Handle = v8Engine.CreateObject<V8NativeObject>();
+				<#=parameter.Value#>Handle.SetProperty("IndentSize", v8Engine.CreateValue(<#=parameter.Value#>.IndentSize));
+				<#=parameter.Value#>Handle.SetProperty("TabSize", v8Engine.CreateValue(<#=parameter.Value#>.TabSize));
+				<#=parameter.Value#>Handle.SetProperty("NewLineCharacter", v8Engine.CreateValue(<#=parameter.Value#>.NewLineCharacter));
+				<#=parameter.Value#>Handle.SetProperty("ConvertTabsToSpaces", v8Engine.CreateValue(<#=parameter.Value#>.ConvertTabsToSpaces));
+				v8Engine.GlobalObject.SetProperty("textspan", <#=parameter.Value#>Handle);
+<#
+				}
+				if( parameter.Key.Contains("FormatCodeOptions")){
+#>
+
+				V8NativeObject <#=parameter.Value#>Handle = v8Engine.CreateObject<V8NativeObject>();
+				<#=parameter.Value#>Handle.SetProperty("InsertSpaceAfterCommaDelimiter", v8Engine.CreateValue(<#=parameter.Value#>.InsertSpaceAfterCommaDelimiter));
+				<#=parameter.Value#>Handle.SetProperty("InsertSpaceAfterSemicolonInForStatements", v8Engine.CreateValue(<#=parameter.Value#>.InsertSpaceAfterSemicolonInForStatements));
+				<#=parameter.Value#>Handle.SetProperty("InsertSpaceBeforeAndAfterBinaryOperators", v8Engine.CreateValue(<#=parameter.Value#>.InsertSpaceBeforeAndAfterBinaryOperators));
+				<#=parameter.Value#>Handle.SetProperty("InsertSpaceAfterKeywordsInControlFlowStatements", v8Engine.CreateValue(<#=parameter.Value#>.InsertSpaceAfterKeywordsInControlFlowStatements));
+				<#=parameter.Value#>Handle.SetProperty("InsertSpaceAfterFunctionKeywordForAnonymousFunctions", v8Engine.CreateValue(<#=parameter.Value#>.InsertSpaceAfterFunctionKeywordForAnonymousFunctions));
+				<#=parameter.Value#>Handle.SetProperty("InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis", v8Engine.CreateValue(<#=parameter.Value#>.InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis));
+				<#=parameter.Value#>Handle.SetProperty("PlaceOpenBraceOnNewLineForFunctions", v8Engine.CreateValue(<#=parameter.Value#>.PlaceOpenBraceOnNewLineForFunctions));
+				<#=parameter.Value#>Handle.SetProperty("PlaceOpenBraceOnNewLineForControlBlocks", v8Engine.CreateValue(<#=parameter.Value#>.PlaceOpenBraceOnNewLineForControlBlocks));
+				v8Engine.GlobalObject.SetProperty("textspan", <#=parameter.Value#>Handle);
+<#
+				}
+				if( parameter.Key.Contains("TodoCommentDescriptor")){
+#>
+
+				InternalHandle[] array = new InternalHandle[descriptors.Length];
+				for ( int i =0; i < <#=parameter.Value#>.Length; i++ ) {
+				V8NativeObject item = v8Engine.CreateObject<V8NativeObject>();
+				item.SetProperty("text", v8Engine.CreateValue(<#=parameter.Value#>[i].text));
+				item.SetProperty("priority", v8Engine.CreateValue(<#=parameter.Value#>[i].priority));
+				array[i] = item;
+				}
+				var <#=parameter.Value#>Handle = v8Engine.CreateArray(array);
+		                v8Engine.GlobalObject.SetProperty("descriptor", <#=parameter.Value#>Handle );
+<#
+				}
+			}
+		        var v8MethodSignature = "\"" + methodName + "\", null ";
+			foreach ( var parameter in method.Value) {
+				v8MethodSignature = v8MethodSignature + "," + parameter.Value + "Handle"; 
+			}
+			v8MethodSignature = v8MethodSignature.TrimEnd(',');
+#>
+				var resultHandle = languageService.Call(<#=v8MethodSignature#>);
+<#
+
+
+
+
+	//Return Parameter Handling
+	if(parameterLength > 1){
+		if(methodName.Contains("getIndentationAtPosition")){
+		#>
+				return resultHandle;
+		<#
+		}
+		else{
+		#>
+				var result = utilities.TypeMapper<<#=returnParameterType#>>(resultHandle);
+				return result;
+		<#
+		}
+	}
+	else if(methodName.Contains("getProgram")){
+		#>
+				return null;
+		<#
+	}
+	else if(methodName.Contains("getCompilerOptionsDiagnostics")){
+		#>
+				var result = utilities.TypeMapper<<#=returnParameterType#>>(resultHandle);
+				return result;
+		<#
+	}
+	#>
+		}
+	<#
+	}
+	#>
+
+
+		/*Helper Functions*/
+
+		public static  void log(string result)
+		{
+		    var mth = new StackTrace().GetFrame(1).GetMethod();
+		    System.Diagnostics.Debugger.Log(0, null, mth.ReflectedType.Name + "." + mth.Name + "()-->" + result + "\n");
+		}
+	}
+}
+

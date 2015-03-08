@@ -49,9 +49,14 @@
     <Compile Include="TypeScriptServiceHostEnvironment.cs" />
     <Compile Include="Utilities\Utilities.cs" />
     <Compile Include="Transpiler.cs" />
-    <Compile Include="T4Templates\InterfacesTranspiler.cs">
-      <DependentUpon>InterfacesTranspiler.tt</DependentUpon>
+    <Compile Include="T4Templates\CSharpTypeScriptLanguageService.cs">
+      <DependentUpon>CSharpTypeScriptLanguageService.tt</DependentUpon>
     </Compile>
+    <Compile Include="T4Templates\TypescriptTypes.cs">
+      <DependentUpon>TypescriptTypes.tt</DependentUpon>
+    </Compile>
+    <Compile Include="T4Templates\TypeScriptServiceHostEnvironment.cs" />
+    <Compile Include="T4Templates\Utilities.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -71,6 +76,9 @@
     <Content Include="getEnums.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="getMethods.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Utilities\" />
@@ -78,9 +86,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="T4Templates\InterfacesTranspiler.tt">
+    <None Include="T4Templates\TypescriptTypes.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>InterfacesTranspiler.cs</LastGenOutput>
+      <LastGenOutput>TypescriptTypes.cs</LastGenOutput>
+    </None>
+    <None Include="T4Templates\CSharpTypeScriptLanguageService.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>CSharpTypeScriptLanguageService.cs</LastGenOutput>
     </None>
   </ItemGroup>
 </Project>

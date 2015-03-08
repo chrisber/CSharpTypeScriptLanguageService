@@ -106,6 +106,11 @@ namespace TypeScriptLanguageServiceTranspiler
             "getEnums.js"
         )); }}
 
+        public  string MethodScript { get { return Path.GetFullPath(Path.Combine(
+            ExecDir,
+            "getMethods.js"
+        )); }}
+
 
         private  void checkPathsExist()
         {
@@ -147,6 +152,10 @@ namespace TypeScriptLanguageServiceTranspiler
             if (!File.Exists(EnumsScript))
             {
                 throw new FileNotFoundException(EnumsScript);
+            }
+            if (!File.Exists(MethodScript))
+            {
+                throw new FileNotFoundException(MethodScript);
             }
         
         }
