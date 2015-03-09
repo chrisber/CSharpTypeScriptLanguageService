@@ -8,40 +8,24 @@ namespace TypeScriptLanguageService
     //
     // Public interface of the host of a language service instance.
     //
-    [ScriptObject("TypeScriptServiceHostEnvironment", ScriptMemberSecurity.Permanent)]
-    public class TypeScriptServiceHostEnvironment : IV8NativeObject
+    [ScriptObject("V8TypeScriptServiceHostEnv", ScriptMemberSecurity.Permanent)]
+    public class V8TypeScriptServiceHostEnv : IV8NativeObject
     {
         V8Engine v8engine = null;
-        public Dictionary<string, IScript> scripts = new Dictionary<string, IScript>();
+        ILanguageServiceHost host = null;
 
-
-
-        public TypeScriptServiceHostEnvironment(V8Engine v8engine)
+        public V8TypeScriptServiceHostEnv(V8Engine v8engine, ILanguageServiceHost host)
         {
             this.v8engine = v8engine;
+            this.host = host;
         }
 
         #region language service host implementation
 
-
-        public string defaultLibScriptFileName { get; set; }
-
-        public int position { get; set; }
-
-
-        public string fileName { get; set; }
-
-
-        public bool isMemberCompletion { get; set; }
-
-
-        public string completionEntry { get; set; }
-
-
-        public CompilerOptions CopOptions { get; set; }
-
-
+   
         public InternalHandle getCompilationSettings(){
+
+            var CopOptions = host.getCompilationSettings();
 
             V8NativeObject cOpt = v8engine.CreateObject<V8NativeObject>();
 
@@ -82,13 +66,14 @@ namespace TypeScriptLanguageService
 
 
         public InternalHandle getNewLine(){
-            return v8engine.CreateValue(Environment.NewLine);
+            return v8engine.CreateValue(host.getNewLine());
         }
 
 
         public InternalHandle[] getScriptFileNames(){
 
-            var scriptArray = scripts.Select(x => x.Key).ToArray<string>().FirstOrDefault();
+
+            var scriptArray = host.getScriptFileNames();
 
             InternalHandle[] handleArray = new InternalHandle[scriptArray.Length];
             for (int i = 0; i < scriptArray.Length; i++)
@@ -100,14 +85,14 @@ namespace TypeScriptLanguageService
 
 
         public InternalHandle getScriptVersion(InternalHandle fileName){
-            return v8engine.CreateValue(scripts[fileName].Version.ToString()); 
+            return v8engine.CreateValue(host.getScriptVersion(fileName)); 
         }
 
        
         public InternalHandle getScriptSnapshot(InternalHandle fileName){
             // return IScriptSnapshot
-            var script = scripts[v8engine.CreateValue(scripts[fileName].ToString())];
-            var snapshot = new ScriptSnapshotAdapter(script, v8engine);
+            
+            var snapshot = host.getScriptSnapshot(fileName);
             v8engine.GlobalObject.SetProperty("snapshot", snapshot, null, true, ScriptMemberSecurity.Locked);
             var snapshotHandle = v8engine.GlobalObject.GetProperty("snapshot");
             return  snapshotHandle;
@@ -121,7 +106,7 @@ namespace TypeScriptLanguageService
 
         //@TODO This callback needs meaning
         public InternalHandle getCancellationToken(){
-            var cToken = new CancellationToken(v8engine);
+            var cToken = new V8CancellationToken(v8engine);
             v8engine.GlobalObject.SetProperty("cToken", cToken, null, true, ScriptMemberSecurity.Locked);
             var cTokenHandle = v8engine.GlobalObject.GetProperty("cToken");
             return  cTokenHandle;
@@ -135,54 +120,54 @@ namespace TypeScriptLanguageService
 
         //@TODO Why do I need the options parameter?, should I mahrsahl  them???
         public InternalHandle getDefaultLibFileName(InternalHandle options ){
-//            var cOptions = new CompilerOptions();
-//            cOptions.allowNonTsExtensions = options.GetProperty("allowNonTsExtensions");
-//            cOptions.charset = options.GetProperty("charset");
-//            cOptions.codepage = options.GetProperty("codepage");
-//            cOptions.declaration = options.GetProperty("declaration");
-//            cOptions.diagnostics = options.GetProperty("diagnostics");
-//            cOptions.emitBOM = options.GetProperty("emitBOM");
-//            cOptions.help = options.GetProperty("help");
-//            cOptions.listFiles = options.GetProperty("listFiles");
-//            cOptions.locale = options.GetProperty("locale");
-//            cOptions.mapRoot = options.GetProperty("mapRoot");
-//            ModuleKind moduleKind;
-//            Enum.TryParse(options.GetProperty("module"), out moduleKind);
-//            cOptions.module = moduleKind;
-//            cOptions.noEmit = options.GetProperty("noEmit");
-//            cOptions.noEmitOnError = options.GetProperty("noEmitOnError");
-//            cOptions.noErrorTruncation = options.GetProperty("noErrorTruncation");
-//            cOptions.noImplicitAny = options.GetProperty("noImplicitAny");
-//            cOptions.noLib = options.GetProperty("noLib");
-//            cOptions.noLibCheck = options.GetProperty("noLibCheck");
-//            cOptions.noResolve = options.GetProperty("noResolve");
-//            cOptions.tsOut = options.GetProperty("tsOut");
-//            cOptions.outDir = options.GetProperty("outDir");
-//            cOptions.preserveConstEnums = options.GetProperty("preserveConstEnums");
-//            cOptions.project = options.GetProperty("project");
-//            cOptions.removeComments = options.GetProperty("removeComments");
-//            cOptions.sourceMap = options.GetProperty("sourceMap");
-//            cOptions.sourceRoot = options.GetProperty("sourceRoot");
-//            cOptions.suppressImplicitAnyIndexErrors = options.GetProperty("suppressImplicitAnyIndexErrors");
-//            ScriptTarget scriptTarget;
-//            Enum.TryParse(options.GetProperty("target"), out scriptTarget);
-//            cOptions.target = scriptTarget;
-//            cOptions.version = options.GetProperty("version");
-//            cOptions.watch = options.GetProperty("watch");
-//            cOptions.stripInternal = options.GetProperty("stripInternal");
+            var cOptions = new CompilerOptions();
+            cOptions.allowNonTsExtensions = options.GetProperty("allowNonTsExtensions");
+            cOptions.charset = options.GetProperty("charset");
+            cOptions.codepage = options.GetProperty("codepage");
+            cOptions.declaration = options.GetProperty("declaration");
+            cOptions.diagnostics = options.GetProperty("diagnostics");
+            cOptions.emitBOM = options.GetProperty("emitBOM");
+            cOptions.help = options.GetProperty("help");
+            cOptions.listFiles = options.GetProperty("listFiles");
+            cOptions.locale = options.GetProperty("locale");
+            cOptions.mapRoot = options.GetProperty("mapRoot");
+            ModuleKind moduleKind;
+            Enum.TryParse(options.GetProperty("module"), out moduleKind);
+            cOptions.module = moduleKind;
+            cOptions.noEmit = options.GetProperty("noEmit");
+            cOptions.noEmitOnError = options.GetProperty("noEmitOnError");
+            cOptions.noErrorTruncation = options.GetProperty("noErrorTruncation");
+            cOptions.noImplicitAny = options.GetProperty("noImplicitAny");
+            cOptions.noLib = options.GetProperty("noLib");
+            cOptions.noLibCheck = options.GetProperty("noLibCheck");
+            cOptions.noResolve = options.GetProperty("noResolve");
+            cOptions.tsOut = options.GetProperty("tsOut");
+            cOptions.outDir = options.GetProperty("outDir");
+            cOptions.preserveConstEnums = options.GetProperty("preserveConstEnums");
+            cOptions.project = options.GetProperty("project");
+            cOptions.removeComments = options.GetProperty("removeComments");
+            cOptions.sourceMap = options.GetProperty("sourceMap");
+            cOptions.sourceRoot = options.GetProperty("sourceRoot");
+            cOptions.suppressImplicitAnyIndexErrors = options.GetProperty("suppressImplicitAnyIndexErrors");
+            ScriptTarget scriptTarget;
+            Enum.TryParse(options.GetProperty("target"), out scriptTarget);
+            cOptions.target = scriptTarget;
+            cOptions.version = options.GetProperty("version");
+            cOptions.watch = options.GetProperty("watch");
+            cOptions.stripInternal = options.GetProperty("stripInternal");
 
-            return v8engine.CreateValue(defaultLibScriptFileName);
+            return v8engine.CreateValue(host.getDefaultLibFileName(cOptions));
 
         }
 
         void log(InternalHandle s){
-
+            host.log(s);
         }
         void trace(InternalHandle s){
-
+            host.trace(s);
         }
         void error(InternalHandle s){
-
+            host.error(s);
         }
 
         #endregion

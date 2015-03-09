@@ -2,9 +2,9 @@
 
 namespace TypeScriptLanguageService
 {
-    public class ScriptSnapshotAdapter
+    public class V8ScriptSnapshot
     {
-        public ScriptSnapshotAdapter()
+        public V8ScriptSnapshot()
         {
         }
     }

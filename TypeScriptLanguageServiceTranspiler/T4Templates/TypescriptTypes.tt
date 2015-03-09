@@ -152,6 +152,24 @@ namespace TypeScriptLanguageService {
 		public string insertedText { get; set; }
         }
 
+    public interface CancellationToken {
+              bool isCancellationRequested();
+    }
+   public interface ILanguageServiceHost {
+        CompilerOptions getCompilationSettings();
+        string getNewLine();
+        string[] getScriptFileNames();
+        string getScriptVersion(string fileName);
+        IScriptSnapshot getScriptSnapshot(string fileName);
+        string getLocalizedDiagnosticMessages();
+        CancellationToken getCancellationToken();
+        string getCurrentDirectory();
+        string getDefaultLibFileName(CompilerOptions options);
+        void log   (string s);
+        void trace (string s);
+        void error (string s);
+    }
+
     public class Program
     {
 

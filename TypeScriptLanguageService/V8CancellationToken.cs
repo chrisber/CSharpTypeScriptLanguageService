@@ -3,11 +3,11 @@ using V8.Net;
 
 namespace TypeScriptLanguageService
 {
-    public class CancellationToken :  IV8NativeObject
+    public class V8CancellationToken :  IV8NativeObject
     {
         V8Engine v8engine = null;
 
-        public CancellationToken(V8Engine v8engine)
+        public V8CancellationToken(V8Engine v8engine)
         {
             this.v8engine = v8engine;
         }

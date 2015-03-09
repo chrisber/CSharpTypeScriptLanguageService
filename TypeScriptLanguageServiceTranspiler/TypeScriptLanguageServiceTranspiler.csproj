@@ -52,12 +52,13 @@
     <Compile Include="T4Templates\TypescriptTypes.cs">
       <DependentUpon>TypescriptTypes.tt</DependentUpon>
     </Compile>
-    <Compile Include="T4Templates\TypeScriptServiceHostEnvironment.cs" />
-    <Compile Include="T4Templates\Utilities.cs" />
     <Compile Include="T4Templates\TypeScriptLanguageService.cs">
       <DependentUpon>TypeScriptLanguageService.tt</DependentUpon>
     </Compile>
-    <Compile Include="T4Templates\ScriptSnapshotAdapter.cs" />
+    <Compile Include="stubs\Utilities.cs" />
+    <Compile Include="stubs\V8CancellationToken.cs" />
+    <Compile Include="stubs\V8ScriptSnapshot.cs" />
+    <Compile Include="stubs\V8TypeScriptServiceHostEnv.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -84,6 +85,7 @@
   <ItemGroup>
     <Folder Include="Utilities\" />
     <Folder Include="T4Templates\" />
+    <Folder Include="stubs\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

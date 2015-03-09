@@ -48,12 +48,10 @@
     <Compile Include="..\TypeScriptLanguageServiceTranspiler\T4Templates\TypescriptTypes.cs">
       <Link>TypescriptTypes.cs</Link>
     </Compile>
-    <Compile Include="TypeScriptServiceHostEnvironment.cs" />
     <Compile Include="Utilities.cs" />
-    <Compile Include="IScript.cs" />
-    <Compile Include="CancellationToken.cs" />
-    <Compile Include="ScriptSnapshotAdapter.cs" />
-    <Compile Include="IScriptSnapshotAdapter.cs" />
+    <Compile Include="V8ScriptSnapshot.cs" />
+    <Compile Include="V8CancellationToken.cs" />
+    <Compile Include="V8TypeScriptServiceHostEnv.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

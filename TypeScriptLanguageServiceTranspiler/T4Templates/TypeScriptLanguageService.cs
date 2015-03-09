@@ -10,19 +10,21 @@ namespace TypeScriptLanguageService {
 	public class TypeScriptLanguageServices {
 
 	V8Engine v8Engine = null;
-	TypeScriptServiceHostEnvironment v8Host = null;
+
 	Utilities utilities = null;
 	InternalHandle languageService = null;
 
-	public TypeScriptLanguageServices()
+	public TypeScriptLanguageServices(ILanguageServiceHost host)
 	{
 		try
 		{   //init V8Engine
 			v8Engine = new V8Engine();
-			v8Engine.GlobalObject.SetProperty(typeof(TypeScriptServiceHostEnvironment), V8PropertyAttributes.Locked, null, true);
-			v8Engine.GlobalObject.SetProperty(typeof(ScriptSnapshotAdapter), V8PropertyAttributes.Locked, null, true);
-			v8Host = new TypeScriptServiceHostEnvironment(v8Engine);
-			v8Engine.GlobalObject.SetProperty("host", v8Host, null, true, ScriptMemberSecurity.Locked);
+			v8Engine.GlobalObject.SetProperty(typeof(V8TypeScriptServiceHostEnv), V8PropertyAttributes.Locked, null, true);
+            v8Engine.GlobalObject.SetProperty(typeof(V8ScriptSnapshot), V8PropertyAttributes.Locked, null, true);
+            v8Engine.GlobalObject.SetProperty(typeof(V8CancellationToken), V8PropertyAttributes.Locked, null, true);
+            this.Host = host;
+            this.V8Host = new V8TypeScriptServiceHostEnv(v8Engine,host);
+			v8Engine.GlobalObject.SetProperty("host", V8Host, null, true, ScriptMemberSecurity.Locked);
 			//Execute typescript.ts
 			string serviceScriptHandle = v8Engine.Compile("");
 			v8Engine.Execute(serviceScriptHandle);
@@ -36,6 +38,9 @@ namespace TypeScriptLanguageService {
 		}
 
 	}
+
+    public ILanguageServiceHost Host { get; set; }
+    public V8TypeScriptServiceHostEnv V8Host { get; set; }
 
 
 

@@ -4,34 +4,30 @@ using V8.Net;
 namespace TypeScriptLanguageService
 {
     [ScriptObject("ScriptSnapshot", ScriptMemberSecurity.Permanent)]
-    public class ScriptSnapshotAdapter :  IV8NativeObject, IScriptSnapshoAdapter
+    public class V8ScriptSnapshot :  IV8NativeObject
     {
 
-        IScript script = null;
+        IScriptSnapshot scriptSnapshot = null;
         V8Engine v8Engine = null;
 
-        public ScriptSnapshotAdapter(IScript script)
+        public V8ScriptSnapshot(V8Engine v8Engine, IScriptSnapshot scriptSnapshot )
         {
-            this.script = script;
-        }
-        public ScriptSnapshotAdapter(IScript script, V8Engine v8Engine)
-        {
-            this.script = script;
             this.v8Engine = v8Engine;
+            this.scriptSnapshot = scriptSnapshot;
         }
 
         #region IScriptSnapshot implementation
-        public InternalHandle getText(int start, int end)
+        public InternalHandle getText(InternalHandle start, InternalHandle end)
         {
-            return v8Engine.CreateValue(script.Source.Substring(start, end - start));
+            return v8Engine.CreateValue(scriptSnapshot.getText(start, end));
         }
         public InternalHandle getLength()
         {
-            return v8Engine.CreateValue(script.Source.Length);
+            return v8Engine.CreateValue(scriptSnapshot.getLength());
         }
         public InternalHandle[] getLineStartPositions()
         {
-            var pos = script.GetLineStartPositions();
+            var pos = scriptSnapshot.getLineStartPositions();
             InternalHandle[] handleArray = new InternalHandle[pos.Length];
             for (int i = 0; i < pos.Length; i++)
             {
@@ -40,8 +36,12 @@ namespace TypeScriptLanguageService
             return handleArray;
         }
         //@TODO place old snapshot into script???
-        public InternalHandle getChangeRange(IScriptSnapshoAdapter oldSnapshot)
+        public InternalHandle getChangeRange(InternalHandle oldSnapshot)
         {
+            //@ TODO IScriptsnapshot needs to be accessible from outside 
+            // how to call scriptSnapshot.getChangeRange();
+//            var v8oldSnapshot = new scriptsn
+//            var changeRange = scriptSnapshot.getChangeRange();
             V8NativeObject textChangeRange = this. v8Engine.CreateObject<V8NativeObject>();
             textChangeRange.SetProperty("span", v8Engine.CreateValue(""));
             textChangeRange.SetProperty("newLength", v8Engine.CreateValue(""));
