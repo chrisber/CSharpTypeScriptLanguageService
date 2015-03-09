@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace CSharpTypeScriptLanguageServices { 
+namespace TypeScriptLanguageService { 
 	
 			[Flags]
 			public enum SyntaxKind {
@@ -1662,20 +1662,12 @@ namespace CSharpTypeScriptLanguageServices {
 	public string[] Symbol { get; set; }
     }
 
-    public class IScriptSnapshot
+    public interface IScriptSnapshot
     {
-       public string getText(int start, int end){
-       return null;
-       }
-       public int getLength(){
-       return 0;
-       }
-       public int[] getLineStartPositions(){
-       return null;
-       }
-       public TextChangeRange getChangeRange(IScriptSnapshot oldSnapshot){
-       	return null;
-       }
+        string getText(int start, int end);
+        int getLength();
+        int[] getLineStartPositions();
+        TextChangeRange getChangeRange(IScriptSnapshot oldSnapshot);
     }
 
     public class TypeMapper {

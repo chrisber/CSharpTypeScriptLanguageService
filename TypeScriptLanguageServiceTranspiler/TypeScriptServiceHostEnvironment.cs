@@ -6,6 +6,7 @@ using System.Linq;
 
 namespace TypeScriptLanguageServiceTranspiler
 {
+
     public class TypeScriptServiceHostEnvironment
     {
         public Dictionary<string, Script> scripts = new Dictionary<string, Script>();
@@ -44,7 +45,7 @@ namespace TypeScriptLanguageServiceTranspiler
         }
 
         [ScriptMember(inScriptName: "getScriptFileNames", security: ScriptMemberSecurity.Permanent)]
-        public string[] getScriptFileNames()
+        private string[] getScriptFileNames()
         {
            
             return  scripts.Keys.ToArray();

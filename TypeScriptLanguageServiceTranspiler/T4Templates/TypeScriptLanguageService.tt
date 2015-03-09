@@ -15,12 +15,12 @@
         transpiler.initTypescriptLanguageService();
         List<KeyValuePair<string,List<KeyValuePair<string,string>>>> methods = transpiler.getServiceMethods();
 #>
-
+         
 
 ﻿using System;
 using V8.Net;
 using System.Diagnostics;
-namespace CSharpTypeScriptLanguageServices { 
+namespace TypeScriptLanguageService { 
 
 
 	public class TypeScriptLanguageServices {
@@ -32,14 +32,13 @@ namespace CSharpTypeScriptLanguageServices {
 
 	public TypeScriptLanguageServices()
 	{
-		v8Host = new TypeScriptServiceHostEnvironment();
-
 		try
 		{   //init V8Engine
 			v8Engine = new V8Engine();
-			//Add the ServiceShimHost to the v8 global context
-			v8Engine.RegisterType<TypeScriptServiceHostEnvironment>(null, recursive: true);
-			v8Engine.GlobalObject.SetProperty("host", v8Host);
+			v8Engine.GlobalObject.SetProperty(typeof(TypeScriptServiceHostEnvironment), V8PropertyAttributes.Locked, null, true);
+			v8Engine.GlobalObject.SetProperty(typeof(ScriptSnapshotAdapter), V8PropertyAttributes.Locked, null, true);
+			v8Host = new TypeScriptServiceHostEnvironment(v8Engine);
+			v8Engine.GlobalObject.SetProperty("host", v8Host, null, true, ScriptMemberSecurity.Locked);
 			//Execute typescript.ts
 			string serviceScriptHandle = v8Engine.Compile("");
 			v8Engine.Execute(serviceScriptHandle);
@@ -172,7 +171,7 @@ namespace CSharpTypeScriptLanguageServices {
 		<#
 	}
 	#>
-		}
+}
 	<#
 	}
 	#>

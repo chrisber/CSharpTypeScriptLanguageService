@@ -29,10 +29,36 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="V8.Net">
+      <HintPath>..\V8dotnet\linux.x64\V8.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="V8.Net.Proxy.Interface">
+      <HintPath>..\V8dotnet\linux.x64\V8.Net.Proxy.Interface.dll</HintPath>
+    </Reference>
+    <Reference Include="V8.Net.SharedTypes">
+      <HintPath>..\V8dotnet\linux.x64\V8.Net.SharedTypes.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MyClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="..\TypeScriptLanguageServiceTranspiler\T4Templates\TypeScriptLanguageService.cs">
+      <Link>TypeScriptLanguageService.cs</Link>
+    </Compile>
+    <Compile Include="..\TypeScriptLanguageServiceTranspiler\T4Templates\TypescriptTypes.cs">
+      <Link>TypescriptTypes.cs</Link>
+    </Compile>
+    <Compile Include="TypeScriptServiceHostEnvironment.cs" />
+    <Compile Include="Utilities.cs" />
+    <Compile Include="IScript.cs" />
+    <Compile Include="CancellationToken.cs" />
+    <Compile Include="ScriptSnapshotAdapter.cs" />
+    <Compile Include="IScriptSnapshotAdapter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <None Include="..\V8dotnet\linux.x64\libV8_Net_Proxy.so">
+      <Link>libV8_Net_Proxy.so</Link>
+    </None>
+  </ItemGroup>
 </Project>

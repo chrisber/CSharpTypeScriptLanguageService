@@ -2,7 +2,7 @@
 using V8.Net;
 using System.Reflection;
 
-namespace CSharpTypeScriptLanguageServices
+namespace TypeScriptLanguageService
 {
     public class Utilities
     {

@@ -1,10 +1,10 @@
 ﻿
-
+         
 
 ﻿using System;
 using V8.Net;
 using System.Diagnostics;
-namespace CSharpTypeScriptLanguageServices { 
+namespace TypeScriptLanguageService { 
 
 
 	public class TypeScriptLanguageServices {
@@ -16,14 +16,13 @@ namespace CSharpTypeScriptLanguageServices {
 
 	public TypeScriptLanguageServices()
 	{
-		v8Host = new TypeScriptServiceHostEnvironment();
-
 		try
 		{   //init V8Engine
 			v8Engine = new V8Engine();
-			//Add the ServiceShimHost to the v8 global context
-			v8Engine.RegisterType<TypeScriptServiceHostEnvironment>(null, recursive: true);
-			v8Engine.GlobalObject.SetProperty("host", v8Host);
+			v8Engine.GlobalObject.SetProperty(typeof(TypeScriptServiceHostEnvironment), V8PropertyAttributes.Locked, null, true);
+			v8Engine.GlobalObject.SetProperty(typeof(ScriptSnapshotAdapter), V8PropertyAttributes.Locked, null, true);
+			v8Host = new TypeScriptServiceHostEnvironment(v8Engine);
+			v8Engine.GlobalObject.SetProperty("host", v8Host, null, true, ScriptMemberSecurity.Locked);
 			//Execute typescript.ts
 			string serviceScriptHandle = v8Engine.Compile("");
 			v8Engine.Execute(serviceScriptHandle);
@@ -42,7 +41,7 @@ namespace CSharpTypeScriptLanguageServices {
 
 		public void  cleanupSemanticCache ( ) {
 				var resultHandle = languageService.Call("cleanupSemanticCache", null );
-		}
+}
 	
 		public Diagnostic[]  getSyntacticDiagnostics (   string fileName) {
 
@@ -50,7 +49,7 @@ namespace CSharpTypeScriptLanguageServices {
 				var resultHandle = languageService.Call("getSyntacticDiagnostics", null ,fileNameHandle);
 				var result = utilities.TypeMapper<Diagnostic[]>(resultHandle);
 				return result;
-				}
+		}
 	
 		public Diagnostic[]  getSemanticDiagnostics (   string fileName) {
 
@@ -58,13 +57,13 @@ namespace CSharpTypeScriptLanguageServices {
 				var resultHandle = languageService.Call("getSemanticDiagnostics", null ,fileNameHandle);
 				var result = utilities.TypeMapper<Diagnostic[]>(resultHandle);
 				return result;
-				}
+		}
 	
 		public Diagnostic[]  getCompilerOptionsDiagnostics ( ) {
 				var resultHandle = languageService.Call("getCompilerOptionsDiagnostics", null );
 				var result = utilities.TypeMapper<Diagnostic[]>(resultHandle);
 				return result;
-				}
+		}
 	
 		public ClassifiedSpan[]  getSyntacticClassifications (   string fileName,  TextSpan span) {
 
@@ -78,7 +77,7 @@ namespace CSharpTypeScriptLanguageServices {
 				var resultHandle = languageService.Call("getSyntacticClassifications", null ,fileNameHandle,spanHandle);
 				var result = utilities.TypeMapper<ClassifiedSpan[]>(resultHandle);
 				return result;
-				}
+		}
 	
 		public ClassifiedSpan[]  getSemanticClassifications (   string fileName,  TextSpan span) {
 
@@ -92,7 +91,7 @@ namespace CSharpTypeScriptLanguageServices {
 				var resultHandle = languageService.Call("getSemanticClassifications", null ,fileNameHandle,spanHandle);
 				var result = utilities.TypeMapper<ClassifiedSpan[]>(resultHandle);
 				return result;
-				}
+		}
 	
 		public CompletionInfo  getCompletionsAtPosition (   string fileName,  int position) {
 
@@ -102,7 +101,7 @@ namespace CSharpTypeScriptLanguageServices {
 				var resultHandle = languageService.Call("getCompletionsAtPosition", null ,fileNameHandle,positionHandle);
 				var result = utilities.TypeMapper<CompletionInfo>(resultHandle);
 				return result;
-				}
+		}
 	
 		public CompletionEntryDetails  getCompletionEntryDetails (   string fileName,  int position,  string entryName) {
 
@@ -114,7 +113,7 @@ namespace CSharpTypeScriptLanguageServices {
 				var resultHandle = languageService.Call("getCompletionEntryDetails", null ,fileNameHandle,positionHandle,entryNameHandle);
 				var result = utilities.TypeMapper<CompletionEntryDetails>(resultHandle);
 				return result;
-				}
+		}
 	
 		public QuickInfo  getQuickInfoAtPosition (   string fileName,  int position) {
 
@@ -124,7 +123,7 @@ namespace CSharpTypeScriptLanguageServices {
 				var resultHandle = languageService.Call("getQuickInfoAtPosition", null ,fileNameHandle,positionHandle);
 				var result = utilities.TypeMapper<QuickInfo>(resultHandle);
 				return result;
-				}
+		}
 	
 		public TextSpan  getNameOrDottedNameSpan (   string fileName,  int startPos,  int endPos) {
 
@@ -136,7 +135,7 @@ namespace CSharpTypeScriptLanguageServices {
 				var resultHandle = languageService.Call("getNameOrDottedNameSpan", null ,fileNameHandle,startPosHandle,endPosHandle);
 				var result = utilities.TypeMapper<TextSpan>(resultHandle);
 				return result;
-				}
+		}
 	
 		public TextSpan  getBreakpointStatementAtPosition (   string fileName,  int position) {
 
@@ -146,7 +145,7 @@ namespace CSharpTypeScriptLanguageServices {
 				var resultHandle = languageService.Call("getBreakpointStatementAtPosition", null ,fileNameHandle,positionHandle);
 				var result = utilities.TypeMapper<TextSpan>(resultHandle);
 				return result;
-				}
+		}
 	
 		public SignatureHelpItems  getSignatureHelpItems (   string fileName,  int position) {
 
@@ -156,7 +155,7 @@ namespace CSharpTypeScriptLanguageServices {
 				var resultHandle = languageService.Call("getSignatureHelpItems", null ,fileNameHandle,positionHandle);
 				var result = utilities.TypeMapper<SignatureHelpItems>(resultHandle);
 				return result;
-				}
+		}
 	
 		public RenameInfo  getRenameInfo (   string fileName,  int position) {
 
@@ -166,7 +165,7 @@ namespace CSharpTypeScriptLanguageServices {
 				var resultHandle = languageService.Call("getRenameInfo", null ,fileNameHandle,positionHandle);
 				var result = utilities.TypeMapper<RenameInfo>(resultHandle);
 				return result;
-				}
+		}
 	
 		public RenameLocation[]  findRenameLocations (   string fileName,  int position,  bool findInStrings,  bool findInComments) {
 
@@ -180,7 +179,7 @@ namespace CSharpTypeScriptLanguageServices {
 				var resultHandle = languageService.Call("findRenameLocations", null ,fileNameHandle,positionHandle,findInStringsHandle,findInCommentsHandle);
 				var result = utilities.TypeMapper<RenameLocation[]>(resultHandle);
 				return result;
-				}
+		}
 	
 		public DefinitionInfo[]  getDefinitionAtPosition (   string fileName,  int position) {
 
@@ -190,7 +189,7 @@ namespace CSharpTypeScriptLanguageServices {
 				var resultHandle = languageService.Call("getDefinitionAtPosition", null ,fileNameHandle,positionHandle);
 				var result = utilities.TypeMapper<DefinitionInfo[]>(resultHandle);
 				return result;
-				}
+		}
 	
 		public ReferenceEntry[]  getReferencesAtPosition (   string fileName,  int position) {
 
@@ -200,7 +199,7 @@ namespace CSharpTypeScriptLanguageServices {
 				var resultHandle = languageService.Call("getReferencesAtPosition", null ,fileNameHandle,positionHandle);
 				var result = utilities.TypeMapper<ReferenceEntry[]>(resultHandle);
 				return result;
-				}
+		}
 	
 		public ReferenceEntry[]  getOccurrencesAtPosition (   string fileName,  int position) {
 
@@ -210,7 +209,7 @@ namespace CSharpTypeScriptLanguageServices {
 				var resultHandle = languageService.Call("getOccurrencesAtPosition", null ,fileNameHandle,positionHandle);
 				var result = utilities.TypeMapper<ReferenceEntry[]>(resultHandle);
 				return result;
-				}
+		}
 	
 		public NavigateToItem[]  getNavigateToItems (   string searchValue,  int maxResultCount) {
 
@@ -220,7 +219,7 @@ namespace CSharpTypeScriptLanguageServices {
 				var resultHandle = languageService.Call("getNavigateToItems", null ,searchValueHandle,maxResultCountHandle);
 				var result = utilities.TypeMapper<NavigateToItem[]>(resultHandle);
 				return result;
-				}
+		}
 	
 		public NavigationBarItem[]  getNavigationBarItems (   string fileName) {
 
@@ -228,7 +227,7 @@ namespace CSharpTypeScriptLanguageServices {
 				var resultHandle = languageService.Call("getNavigationBarItems", null ,fileNameHandle);
 				var result = utilities.TypeMapper<NavigationBarItem[]>(resultHandle);
 				return result;
-				}
+		}
 	
 		public OutliningSpan[]  getOutliningSpans (   string fileName) {
 
@@ -236,7 +235,7 @@ namespace CSharpTypeScriptLanguageServices {
 				var resultHandle = languageService.Call("getOutliningSpans", null ,fileNameHandle);
 				var result = utilities.TypeMapper<OutliningSpan[]>(resultHandle);
 				return result;
-				}
+		}
 	
 		public TodoComment[]  getTodoComments (   string fileName,  TodoCommentDescriptor[] descriptors) {
 
@@ -254,7 +253,7 @@ namespace CSharpTypeScriptLanguageServices {
 				var resultHandle = languageService.Call("getTodoComments", null ,fileNameHandle,descriptorsHandle);
 				var result = utilities.TypeMapper<TodoComment[]>(resultHandle);
 				return result;
-				}
+		}
 	
 		public TextSpan[]  getBraceMatchingAtPosition (   string fileName,  int position) {
 
@@ -264,7 +263,7 @@ namespace CSharpTypeScriptLanguageServices {
 				var resultHandle = languageService.Call("getBraceMatchingAtPosition", null ,fileNameHandle,positionHandle);
 				var result = utilities.TypeMapper<TextSpan[]>(resultHandle);
 				return result;
-				}
+		}
 	
 		public int  getIndentationAtPosition (   string fileName,  int position,  EditorOptions options) {
 
@@ -280,7 +279,7 @@ namespace CSharpTypeScriptLanguageServices {
 				v8Engine.GlobalObject.SetProperty("textspan", optionsHandle);
 				var resultHandle = languageService.Call("getIndentationAtPosition", null ,fileNameHandle,positionHandle,optionsHandle);
 				return resultHandle;
-				}
+		}
 	
 		public TextChange[]  getFormattingEditsForRange (   string fileName,  int start,  int end,  FormatCodeOptions options) {
 
@@ -289,6 +288,7 @@ namespace CSharpTypeScriptLanguageServices {
 				Handle startHandle = v8Engine.CreateValue(start);
 
 				Handle endHandle = v8Engine.CreateValue(end);
+
 				V8NativeObject optionsHandle = v8Engine.CreateObject<V8NativeObject>();
 				optionsHandle.SetProperty("InsertSpaceAfterCommaDelimiter", v8Engine.CreateValue(options.InsertSpaceAfterCommaDelimiter));
 				optionsHandle.SetProperty("InsertSpaceAfterSemicolonInForStatements", v8Engine.CreateValue(options.InsertSpaceAfterSemicolonInForStatements));
@@ -302,11 +302,12 @@ namespace CSharpTypeScriptLanguageServices {
 				var resultHandle = languageService.Call("getFormattingEditsForRange", null ,fileNameHandle,startHandle,endHandle,optionsHandle);
 				var result = utilities.TypeMapper<TextChange[]>(resultHandle);
 				return result;
-				}
+		}
 	
 		public TextChange[]  getFormattingEditsForDocument (   string fileName,  FormatCodeOptions options) {
 
 				Handle fileNameHandle = v8Engine.CreateValue(fileName);
+
 				V8NativeObject optionsHandle = v8Engine.CreateObject<V8NativeObject>();
 				optionsHandle.SetProperty("InsertSpaceAfterCommaDelimiter", v8Engine.CreateValue(options.InsertSpaceAfterCommaDelimiter));
 				optionsHandle.SetProperty("InsertSpaceAfterSemicolonInForStatements", v8Engine.CreateValue(options.InsertSpaceAfterSemicolonInForStatements));
@@ -320,7 +321,7 @@ namespace CSharpTypeScriptLanguageServices {
 				var resultHandle = languageService.Call("getFormattingEditsForDocument", null ,fileNameHandle,optionsHandle);
 				var result = utilities.TypeMapper<TextChange[]>(resultHandle);
 				return result;
-				}
+		}
 	
 		public TextChange[]  getFormattingEditsAfterKeystroke (   string fileName,  int position,  string key,  FormatCodeOptions options) {
 
@@ -329,6 +330,7 @@ namespace CSharpTypeScriptLanguageServices {
 				Handle positionHandle = v8Engine.CreateValue(position);
 
 				Handle keyHandle = v8Engine.CreateValue(key);
+
 				V8NativeObject optionsHandle = v8Engine.CreateObject<V8NativeObject>();
 				optionsHandle.SetProperty("InsertSpaceAfterCommaDelimiter", v8Engine.CreateValue(options.InsertSpaceAfterCommaDelimiter));
 				optionsHandle.SetProperty("InsertSpaceAfterSemicolonInForStatements", v8Engine.CreateValue(options.InsertSpaceAfterSemicolonInForStatements));
@@ -342,7 +344,7 @@ namespace CSharpTypeScriptLanguageServices {
 				var resultHandle = languageService.Call("getFormattingEditsAfterKeystroke", null ,fileNameHandle,positionHandle,keyHandle,optionsHandle);
 				var result = utilities.TypeMapper<TextChange[]>(resultHandle);
 				return result;
-				}
+		}
 	
 		public EmitOutput  getEmitOutput (   string fileName) {
 
@@ -350,12 +352,12 @@ namespace CSharpTypeScriptLanguageServices {
 				var resultHandle = languageService.Call("getEmitOutput", null ,fileNameHandle);
 				var result = utilities.TypeMapper<EmitOutput>(resultHandle);
 				return result;
-				}
+		}
 	
 		public Program  getProgram ( ) {
 				var resultHandle = languageService.Call("getProgram", null );
 				return null;
-				}
+		}
 	
 		public SourceFile  getSourceFile (   string fileName) {
 
@@ -363,11 +365,11 @@ namespace CSharpTypeScriptLanguageServices {
 				var resultHandle = languageService.Call("getSourceFile", null ,fileNameHandle);
 				var result = utilities.TypeMapper<SourceFile>(resultHandle);
 				return result;
-				}
+		}
 	
 		public void  dispose ( ) {
 				var resultHandle = languageService.Call("dispose", null );
-		}
+}
 	
 
 		/*Helper Functions*/
