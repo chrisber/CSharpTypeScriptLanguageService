@@ -45,7 +45,7 @@ namespace TypeScriptLanguageServiceTranspiler
         }
 
         [ScriptMember(inScriptName: "getScriptFileNames", security: ScriptMemberSecurity.Permanent)]
-        private string[] getScriptFileNames()
+        public string[] getScriptFileNames()
         {
            
             return  scripts.Keys.ToArray();
