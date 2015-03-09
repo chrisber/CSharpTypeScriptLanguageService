@@ -25,19 +25,6 @@ namespace TypeScriptLanguageServiceTranspiler
 
         }
 
-        public List<string> testme()
-        {
-            List<string> list = new List<string>();
-            list.Add(utilities.ExecDir);
-            list.Add(utilities.CompilerDirPath);
-            list.Add(utilities.CompilerTypesScriptPath);
-            list.Add(utilities.LibdtsScriptPath);
-            list.Add(utilities.ServiceDirPath);
-            list.Add(utilities.ServiceScriptPath);
-            list.Add(utilities.TypeScriptServicesScriptPath);
-            return list;
-        }
-
         public void addRequiredScriptsToHost()
         {
             //add all files
