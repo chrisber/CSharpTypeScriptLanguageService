@@ -93,7 +93,8 @@ namespace TypeScriptLanguageService
             // return IScriptSnapshot
             
             var snapshot = host.getScriptSnapshot(fileName);
-            v8engine.GlobalObject.SetProperty("snapshot", snapshot, null, true, ScriptMemberSecurity.Locked);
+            var v8Snapshot = new V8ScriptSnapshot(v8engine, snapshot);
+            v8engine.GlobalObject.SetProperty("snapshot", v8Snapshot, null, true, ScriptMemberSecurity.Locked);
             var snapshotHandle = v8engine.GlobalObject.GetProperty("snapshot");
             return  snapshotHandle;
 
