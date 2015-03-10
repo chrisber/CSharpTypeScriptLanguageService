@@ -21,7 +21,7 @@ namespace TypeScriptLanguageService {
 	Utilities utilities = null;
 	InternalHandle languageService = null;
 
-	public TypeScriptLanguageServices(ILanguageServiceHost host)
+	public TypeScriptLanguageServices(ILanguageServiceHost host, string typescript)
 	{
 		try
 		{   //init V8Engine
@@ -35,10 +35,10 @@ namespace TypeScriptLanguageService {
 			v8Engine.GlobalObject.SetProperty("host", V8Host, null, true, ScriptMemberSecurity.Locked);
 
             //Execute typescript.ts
-			v8Engine.Execute(File.ReadAllText("typescriptServices.js"));
+			v8Engine.Execute(typescript);
             
             //create languageservice
-            v8Engine.Execute(@"﻿var ls = ts.createLanguageService(host, ts.createDocumentRegistry())");
+            v8Engine.Execute(@"﻿var languageService = ts.createLanguageService(host, ts.createDocumentRegistry())");
 
             //save handle to the languageservice in the v8 context
 			languageService = v8Engine.GlobalObject.GetProperty("languageService");
