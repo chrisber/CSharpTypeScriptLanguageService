@@ -64,6 +64,67 @@ namespace TypeScriptLanguageService {
 	#>
 
 
+     <# 
+    foreach ( var interfaces in interfaceList) 
+    {
+        foreach (var tsInterface in interfaces)
+        {
+            if (tsInterface.Value.Count > 0)
+            {
+    #>  
+        public interface I<#=tsInterface.Key#> 
+        {
+
+            <#
+                foreach (var interfaceMember in tsInterface.Value)
+                {
+                    var interfaceMemberType = interfaceMember.Key.Replace("boolean","bool")
+                                .Replace("number","int")
+                                .Replace("|","")
+                                .Replace("any","object")
+                                .Replace("Map<Symbol>","object")
+                                .Replace("Map<int>","object")
+                                .Replace("Map<string>","object")
+                                .Replace("Map<bool>","object")
+                                .Replace("Map<bool>","object")
+                                .Replace("Map<TypeReference>","object")
+                                .Replace("stringobject","object")
+                                .Replace("WriteFileCallback","object");
+                                                  
+                    interfaceMemberType = Regex.Replace(interfaceMemberType, @"\bEntityName\b", "object");
+                    interfaceMemberType = Regex.Replace(interfaceMemberType, @"\bDeclarationName\b", "object");
+                    interfaceMemberType = Regex.Replace(interfaceMemberType, @"\bIdentifierBindingPattern\b", "object");
+                    interfaceMemberType = Regex.Replace(interfaceMemberType, @"\bBlockExpression\b", "object");
+                    interfaceMemberType = Regex.Replace(interfaceMemberType, @"\bLiteralExpressionTemplateExpression\b", "object");
+                    interfaceMemberType = Regex.Replace(interfaceMemberType, @"\bVariableDeclarationListExpression\b", "object");
+                    interfaceMemberType = Regex.Replace(interfaceMemberType, @"\bCaseOrDefaultClause\b", "object");
+                    interfaceMemberType = Regex.Replace(interfaceMemberType, @"\bIdentifierLiteralExpression\b", "object");
+                    interfaceMemberType = Regex.Replace(interfaceMemberType, @"\bModuleBlockModuleDeclaration\b", "object");
+                    interfaceMemberType = Regex.Replace(interfaceMemberType, @"\bEntityNameExternalModuleReference\b", "object");
+                    interfaceMemberType = Regex.Replace(interfaceMemberType, @"\bNamespaceImportNamedImports\b", "object");
+                    interfaceMemberType = Regex.Replace(interfaceMemberType, @"\boperator\b", "object");
+                    interfaceMemberType = Regex.Replace(interfaceMemberType, @"\bNamedExports\b", "object");
+                    interfaceMemberType = Regex.Replace(interfaceMemberType, @"\bObjectType\b", "object");
+                    interfaceMemberType = Regex.Replace(interfaceMemberType, @"\bstringDiagnosticMessageChain\b", "object");
+                    interfaceMemberType = Regex.Replace(interfaceMemberType, @"\bTypeChecker\b", "object");
+                    
+                var interfaceMemberName = interfaceMember.Value.Replace("?","");
+                    interfaceMemberName = Regex.Replace(interfaceMemberName, @"\bout\b", "tsOut");
+                    interfaceMemberName = Regex.Replace(interfaceMemberName, @"\boperator\b", "tsOperator");
+
+            #>
+<#=interfaceMemberType#> <#=interfaceMemberName#> { get; set; }
+            <#
+                }
+            #>
+
+        } 
+    <#
+           }
+        }
+    }
+    #> 
+
 	<# 
 	foreach ( var interfaces in interfaceList) 
 	{
@@ -72,8 +133,10 @@ namespace TypeScriptLanguageService {
 		    if (tsInterface.Value.Count > 0)
 		    {
 	#>  
-	    public class <#= tsInterface.Key #> {  
-		    <#
+	    public class <#= tsInterface.Key#> : I<#= tsInterface.Key#> 
+        {
+
+<#
 		        foreach (var interfaceMember in tsInterface.Value)
 		        {
 		        	var type = interfaceMember.Key.Replace("boolean","bool")
@@ -88,46 +151,42 @@ namespace TypeScriptLanguageService {
 		        				.Replace("Map<TypeReference>","object")
 		        				.Replace("stringobject","object")
 		        				.Replace("WriteFileCallback","object");
-
-
-
-				type = Regex.Replace(type, @"\bEntityName\b", "object");
-				type = Regex.Replace(type, @"\bDeclarationName\b", "object");
-				type = Regex.Replace(type, @"\bIdentifierBindingPattern\b", "object");
-				type = Regex.Replace(type, @"\bBlockExpression\b", "object");
-				type = Regex.Replace(type, @"\bLiteralExpressionTemplateExpression\b", "object");
-				type = Regex.Replace(type, @"\bVariableDeclarationListExpression\b", "object");
-				type = Regex.Replace(type, @"\bCaseOrDefaultClause\b", "object");
-				type = Regex.Replace(type, @"\bIdentifierLiteralExpression\b", "object");
-				type = Regex.Replace(type, @"\bModuleBlockModuleDeclaration\b", "object");
-				type = Regex.Replace(type, @"\bEntityNameExternalModuleReference\b", "object");
-				type = Regex.Replace(type, @"\bNamespaceImportNamedImports\b", "object");
-				type = Regex.Replace(type, @"\boperator\b", "object");
-				type = Regex.Replace(type, @"\bNamedExports\b", "object");
-				type = Regex.Replace(type, @"\bObjectType\b", "object");
-				type = Regex.Replace(type, @"\bstringDiagnosticMessageChain\b", "object");
-				type = Regex.Replace(type, @"\bTypeChecker\b", "object");
-
-
-
-
-		        	
-		        	
+                                                  
+    				type = Regex.Replace(type, @"\bEntityName\b", "object");
+    				type = Regex.Replace(type, @"\bDeclarationName\b", "object");
+    				type = Regex.Replace(type, @"\bIdentifierBindingPattern\b", "object");
+    				type = Regex.Replace(type, @"\bBlockExpression\b", "object");
+    				type = Regex.Replace(type, @"\bLiteralExpressionTemplateExpression\b", "object");
+    				type = Regex.Replace(type, @"\bVariableDeclarationListExpression\b", "object");
+    				type = Regex.Replace(type, @"\bCaseOrDefaultClause\b", "object");
+    				type = Regex.Replace(type, @"\bIdentifierLiteralExpression\b", "object");
+    				type = Regex.Replace(type, @"\bModuleBlockModuleDeclaration\b", "object");
+    				type = Regex.Replace(type, @"\bEntityNameExternalModuleReference\b", "object");
+    				type = Regex.Replace(type, @"\bNamespaceImportNamedImports\b", "object");
+    				type = Regex.Replace(type, @"\boperator\b", "object");
+    				type = Regex.Replace(type, @"\bNamedExports\b", "object");
+    				type = Regex.Replace(type, @"\bObjectType\b", "object");
+    				type = Regex.Replace(type, @"\bstringDiagnosticMessageChain\b", "object");
+    				type = Regex.Replace(type, @"\bTypeChecker\b", "object");
+                    
 				var name = interfaceMember.Value.Replace("?","");
 		          	name = Regex.Replace(name, @"\bout\b", "tsOut");
 				name = Regex.Replace(name, @"\boperator\b", "tsOperator");
 
-		    #>
-		         public <#= type #> <#= name #>  { get; set; }
-		    <#
+#>
+            public <#=type#> <#=name#> { get; set; }
+<#
 		        }
-		    #>
-	    } 
+        #>
+
+        } 
 	<#
 		   }
 		}
 	}
-	#> 
+	#>
+
+
 
     public class SymbolTable {
 	public string[] Symbol { get; set; }
