@@ -1681,7 +1681,7 @@ namespace TypeScriptLanguageService {
 		public string insertedText { get; set; }
         }
 
-    public interface CancellationToken {
+    public interface ICancellationToken {
               bool isCancellationRequested();
     }
    public interface ILanguageServiceHost {
@@ -1691,7 +1691,7 @@ namespace TypeScriptLanguageService {
         string getScriptVersion(string fileName);
         IScriptSnapshot getScriptSnapshot(string fileName);
         string getLocalizedDiagnosticMessages();
-        CancellationToken getCancellationToken();
+        ICancellationToken getCancellationToken();
         string getCurrentDirectory();
         string getDefaultLibFileName(CompilerOptions options);
         void log   (string s);
