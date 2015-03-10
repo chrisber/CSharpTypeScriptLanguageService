@@ -3672,7 +3672,7 @@ namespace TypeScriptLanguageService {
               bool isCancellationRequested();
     }
    public interface ILanguageServiceHost {
-        CompilerOptions getCompilationSettings();
+        ICompilerOptions getCompilationSettings();
         string getNewLine();
         string[] getScriptFileNames();
         string getScriptVersion(string fileName);
@@ -3680,7 +3680,7 @@ namespace TypeScriptLanguageService {
         string getLocalizedDiagnosticMessages();
         ICancellationToken getCancellationToken();
         string getCurrentDirectory();
-        string getDefaultLibFileName(CompilerOptions options);
+        string getDefaultLibFileName(ICompilerOptions options);
         void log   (string s);
         void trace (string s);
         void error (string s);
