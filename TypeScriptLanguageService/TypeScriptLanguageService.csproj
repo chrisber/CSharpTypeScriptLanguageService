@@ -55,8 +55,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <None Include="..\V8dotnet\linux.x64\libV8_Net_Proxy.so">
+    <Content Include="..\V8dotnet\linux.x64\libV8_Net_Proxy.so">
       <Link>libV8_Net_Proxy.so</Link>
-    </None>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>
