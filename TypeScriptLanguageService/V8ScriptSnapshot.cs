@@ -38,15 +38,9 @@ namespace TypeScriptLanguageService
         //@TODO place old snapshot into script???
         public InternalHandle getChangeRange(InternalHandle oldSnapshot)
         {
-            //@ TODO IScriptsnapshot needs to be accessible from outside 
-            // how to call scriptSnapshot.getChangeRange();
-//            var v8oldSnapshot = new scriptsn
-//            var changeRange = scriptSnapshot.getChangeRange();
-            V8NativeObject textChangeRange = this. v8Engine.CreateObject<V8NativeObject>();
-            textChangeRange.SetProperty("span", v8Engine.CreateValue(""));
-            textChangeRange.SetProperty("newLength", v8Engine.CreateValue(""));
+            //@ TODO IScriptsnapshot needs to be accessible from outside
 
-            return textChangeRange;
+            return null;
         }
         #endregion
 

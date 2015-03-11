@@ -101,7 +101,7 @@ namespace TypeScriptLanguageService
         }
 
         public InternalHandle getLocalizedDiagnosticMessages(){
-            return v8engine.CreateValue("null");
+            return null;
         }
 
 
@@ -116,7 +116,7 @@ namespace TypeScriptLanguageService
 
         //@TODO What they need the dir for???
         public InternalHandle getCurrentDirectory() {
-            return v8engine.CreateValue("");
+            return null;
         }
 
         //@TODO Why do I need the options parameter?, should I mahrsahl  them???
