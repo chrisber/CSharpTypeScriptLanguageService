@@ -765,7 +765,7 @@ namespace TypeScriptLanguageService {
         {
 
             VariableDeclarationList parent { get; set; }
-            object name { get; set; }
+            Identifier name { get; set; }
             TypeNode type { get; set; }
             Expression initializer { get; set; }
             
@@ -782,7 +782,7 @@ namespace TypeScriptLanguageService {
         {
 
             Node dotDotDotToken { get; set; }
-            object name { get; set; }
+            Identifier name { get; set; }
             Node questionToken { get; set; }
             TypeNode type { get; set; }
             Expression initializer { get; set; }
@@ -794,7 +794,7 @@ namespace TypeScriptLanguageService {
 
             Identifier propertyName { get; set; }
             Node dotDotDotToken { get; set; }
-            object name { get; set; }
+            Identifier name { get; set; }
             Expression initializer { get; set; }
             
         } 
@@ -859,7 +859,7 @@ namespace TypeScriptLanguageService {
             object _functionLikeDeclarationBrand { get; set; }
             Node asteriskToken { get; set; }
             Node questionToken { get; set; }
-            object body { get; set; }
+            Block body { get; set; }
             
         } 
       
@@ -1074,7 +1074,7 @@ namespace TypeScriptLanguageService {
         {
 
             Identifier name { get; set; }
-            object body { get; set; }
+            Block body { get; set; }
             
         } 
       
@@ -1166,7 +1166,7 @@ namespace TypeScriptLanguageService {
         {
 
             LeftHandSideExpression tag { get; set; }
-            object template { get; set; }
+            LiteralExpression template { get; set; }
             
         } 
       
@@ -1239,7 +1239,7 @@ namespace TypeScriptLanguageService {
         public interface IForStatement 
         {
 
-            object initializer { get; set; }
+            VariableDeclarationList initializer { get; set; }
             Expression condition { get; set; }
             Expression iterator { get; set; }
             
@@ -1248,7 +1248,7 @@ namespace TypeScriptLanguageService {
         public interface IForInStatement 
         {
 
-            object initializer { get; set; }
+            VariableDeclarationList initializer { get; set; }
             Expression expression { get; set; }
             
         } 
@@ -1256,7 +1256,7 @@ namespace TypeScriptLanguageService {
         public interface IForOfStatement 
         {
 
-            object initializer { get; set; }
+            VariableDeclarationList initializer { get; set; }
             Expression expression { get; set; }
             
         } 
@@ -1414,8 +1414,8 @@ namespace TypeScriptLanguageService {
         public interface IModuleDeclaration 
         {
 
-            object name { get; set; }
-            object body { get; set; }
+            Identifier name { get; set; }
+            ModuleBlock body { get; set; }
             
         } 
       
@@ -1453,7 +1453,7 @@ namespace TypeScriptLanguageService {
         {
 
             Identifier name { get; set; }
-            object namedBindings { get; set; }
+            NamespaceImport namedBindings { get; set; }
             
         } 
       
@@ -1761,7 +1761,7 @@ namespace TypeScriptLanguageService {
             SourceFile file { get; set; }
             int start { get; set; }
             int length { get; set; }
-            object messageText { get; set; }
+            string messageText { get; set; }
             DiagnosticCategory category { get; set; }
             int code { get; set; }
             
@@ -1824,7 +1824,7 @@ namespace TypeScriptLanguageService {
         {
 
             string name { get; set; }
-            object type { get; set; }
+            string type { get; set; }
             bool isFilePath { get; set; }
             string shortName { get; set; }
             DiagnosticMessage description { get; set; }
@@ -2250,7 +2250,7 @@ namespace TypeScriptLanguageService {
         {
 
             public VariableDeclarationList parent { get; set; }
-            public object name { get; set; }
+            public Identifier name { get; set; }
             public TypeNode type { get; set; }
             public Expression initializer { get; set; }
 
@@ -2267,7 +2267,7 @@ namespace TypeScriptLanguageService {
         {
 
             public Node dotDotDotToken { get; set; }
-            public object name { get; set; }
+            public Identifier name { get; set; }
             public Node questionToken { get; set; }
             public TypeNode type { get; set; }
             public Expression initializer { get; set; }
@@ -2279,7 +2279,7 @@ namespace TypeScriptLanguageService {
 
             public Identifier propertyName { get; set; }
             public Node dotDotDotToken { get; set; }
-            public object name { get; set; }
+            public Identifier name { get; set; }
             public Expression initializer { get; set; }
 
         } 
@@ -2344,7 +2344,7 @@ namespace TypeScriptLanguageService {
             public object _functionLikeDeclarationBrand { get; set; }
             public Node asteriskToken { get; set; }
             public Node questionToken { get; set; }
-            public object body { get; set; }
+            public Block body { get; set; }
 
         } 
       
@@ -2559,7 +2559,7 @@ namespace TypeScriptLanguageService {
         {
 
             public Identifier name { get; set; }
-            public object body { get; set; }
+            public Block body { get; set; }
 
         } 
       
@@ -2651,7 +2651,7 @@ namespace TypeScriptLanguageService {
         {
 
             public LeftHandSideExpression tag { get; set; }
-            public object template { get; set; }
+            public LiteralExpression template { get; set; }
 
         } 
       
@@ -2724,7 +2724,7 @@ namespace TypeScriptLanguageService {
         public class ForStatement : IForStatement 
         {
 
-            public object initializer { get; set; }
+            public VariableDeclarationList initializer { get; set; }
             public Expression condition { get; set; }
             public Expression iterator { get; set; }
 
@@ -2733,7 +2733,7 @@ namespace TypeScriptLanguageService {
         public class ForInStatement : IForInStatement 
         {
 
-            public object initializer { get; set; }
+            public VariableDeclarationList initializer { get; set; }
             public Expression expression { get; set; }
 
         } 
@@ -2741,7 +2741,7 @@ namespace TypeScriptLanguageService {
         public class ForOfStatement : IForOfStatement 
         {
 
-            public object initializer { get; set; }
+            public VariableDeclarationList initializer { get; set; }
             public Expression expression { get; set; }
 
         } 
@@ -2899,8 +2899,8 @@ namespace TypeScriptLanguageService {
         public class ModuleDeclaration : IModuleDeclaration 
         {
 
-            public object name { get; set; }
-            public object body { get; set; }
+            public Identifier name { get; set; }
+            public ModuleBlock body { get; set; }
 
         } 
       
@@ -2938,7 +2938,7 @@ namespace TypeScriptLanguageService {
         {
 
             public Identifier name { get; set; }
-            public object namedBindings { get; set; }
+            public NamespaceImport namedBindings { get; set; }
 
         } 
       
@@ -3246,7 +3246,7 @@ namespace TypeScriptLanguageService {
             public SourceFile file { get; set; }
             public int start { get; set; }
             public int length { get; set; }
-            public object messageText { get; set; }
+            public string messageText { get; set; }
             public DiagnosticCategory category { get; set; }
             public int code { get; set; }
 
@@ -3309,7 +3309,7 @@ namespace TypeScriptLanguageService {
         {
 
             public string name { get; set; }
-            public object type { get; set; }
+            public string type { get; set; }
             public bool isFilePath { get; set; }
             public string shortName { get; set; }
             public DiagnosticMessage description { get; set; }

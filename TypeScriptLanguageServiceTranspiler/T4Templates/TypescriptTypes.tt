@@ -78,9 +78,10 @@ namespace TypeScriptLanguageService {
             <#
                 foreach (var interfaceMember in tsInterface.Value)
                 {
-                    var interfaceMemberType = interfaceMember.Key.Replace("boolean","bool")
+                    
+                    var interfaceMemberType = interfaceMember.Key.Split('|')[0];
+                    interfaceMemberType = interfaceMemberType.Replace("boolean","bool")
                                 .Replace("number","int")
-                                .Replace("|","")
                                 .Replace("any","object")
                                 .Replace("Map<Symbol>","object")
                                 .Replace("Map<int>","object")
@@ -139,9 +140,9 @@ namespace TypeScriptLanguageService {
 <#
                 foreach (var interfaceMember in tsInterface.Value)
                 {
-                    var type = interfaceMember.Key.Replace("boolean","bool")
+                    var type = interfaceMember.Key.Split('|')[0];
+                    type = type.Replace("boolean","bool")
                                 .Replace("number","int")
-                                .Replace("|","")
                                 .Replace("any","object")
                                 .Replace("Map<Symbol>","object")
                                 .Replace("Map<int>","object")
