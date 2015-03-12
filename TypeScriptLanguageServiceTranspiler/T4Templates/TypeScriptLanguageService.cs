@@ -14,7 +14,7 @@ using System.Diagnostics;
 namespace TypeScriptLanguageService { 
 
 
-	public class TypeScriptLanguageServices {
+	public class TypeScriptLanguageServices : ITypeScriptLanguageServices {
 
 	V8Engine v8Engine = null;
 
