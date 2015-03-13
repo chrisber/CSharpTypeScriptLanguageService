@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 using TypeScriptLanguageServiceTranspiler;
 
 
-namespace TypeScriptLanguageServiceTranspilerTest
+namespace TypeScriptLanguageServiceTranspiler.Test
 {
     class MainClass
     {
