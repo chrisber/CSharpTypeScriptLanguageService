@@ -161,13 +161,13 @@ namespace TypeScriptLanguageService
 
         }
 
-        void log(InternalHandle s){
+        public void log(InternalHandle s){
             host.log(s);
         }
-        void trace(InternalHandle s){
+        public void trace(InternalHandle s){
             host.trace(s);
         }
-        void error(InternalHandle s){
+        public void error(InternalHandle s){
             host.error(s);
         }
 
@@ -187,19 +187,3 @@ namespace TypeScriptLanguageService
        
     }
 }
-
-//
-// Public interface of the host of a language service instance.
-//
-//export interface LanguageServiceHost {
-
-
-
-
-
-
-//    log? (s: string): void;
-//    trace? (s: string): void;
-//    error? (s: string): void;
-//}
-
