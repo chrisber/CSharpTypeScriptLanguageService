@@ -34,6 +34,7 @@ namespace TypeScriptLanguageService
 					T generic = Activator.CreateInstance<T>();
 					return generic;
 				}
+			}
 
             //@TODO do i need to care about enum parse?
             MethodInfo method = typeof(Utilities).GetMethod("TypeMapper");//@TODO dont call this every time
