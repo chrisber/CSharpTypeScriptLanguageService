@@ -159,6 +159,8 @@ namespace TypeScriptLanguageService {
 			v8MethodSignature = v8MethodSignature.TrimEnd(',');
 #>
 				var resultHandle = languageService.Call(<#=v8MethodSignature#>);
+                resultHandle.ThrowOnError();
+
 <#
 
 
