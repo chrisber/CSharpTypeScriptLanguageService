@@ -25,48 +25,59 @@ namespace TypeScriptLanguageService
    
         public InternalHandle getCompilationSettings(){
 
-            var CopOptions = host.getCompilationSettings();
+            var cOpt = host.getCompilationSettings();
 
-            V8NativeObject cOpt = v8engine.CreateObject<V8NativeObject>();
+			if (cOpt == null) {
+				return null;
+			}
 
-            cOpt.SetProperty("allowNonTsExtensions", v8engine.CreateValue(CopOptions.allowNonTsExtensions));
-            cOpt.SetProperty("charset", v8engine.CreateValue(CopOptions.charset));
-            cOpt.SetProperty("codepage", v8engine.CreateValue(CopOptions.codepage));
-            cOpt.SetProperty("declaration", v8engine.CreateValue(CopOptions.declaration));
-            cOpt.SetProperty("diagnostics", v8engine.CreateValue(CopOptions.diagnostics));
-            cOpt.SetProperty("emitBOM", v8engine.CreateValue(CopOptions.emitBOM));
-            cOpt.SetProperty("help", v8engine.CreateValue(CopOptions.help));
-            cOpt.SetProperty("listFiles", v8engine.CreateValue(CopOptions.listFiles));
-            cOpt.SetProperty("locale", v8engine.CreateValue(CopOptions.locale));
-            cOpt.SetProperty("mapRoot", v8engine.CreateValue(CopOptions.mapRoot));
-            cOpt.SetProperty("module", v8engine.CreateValue(CopOptions.module));
-            cOpt.SetProperty("noEmit", v8engine.CreateValue(CopOptions.noEmit));
-            cOpt.SetProperty("noEmitOnError", v8engine.CreateValue(CopOptions.noEmitOnError));
-            cOpt.SetProperty("noErrorTruncation", v8engine.CreateValue(CopOptions.noErrorTruncation));
-            cOpt.SetProperty("noImplicitAny", v8engine.CreateValue(CopOptions.noImplicitAny));
-            cOpt.SetProperty("noLib", v8engine.CreateValue(CopOptions.noLib));
-            cOpt.SetProperty("noLibCheck", v8engine.CreateValue(CopOptions.noLibCheck));
-            cOpt.SetProperty("noResolve", v8engine.CreateValue(CopOptions.noResolve));
-            cOpt.SetProperty("tsOut", v8engine.CreateValue(CopOptions.tsOut));
-            cOpt.SetProperty("outDir", v8engine.CreateValue(CopOptions.outDir));
-            cOpt.SetProperty("preserveConstEnums", v8engine.CreateValue(CopOptions.preserveConstEnums));
-            cOpt.SetProperty("project", v8engine.CreateValue(CopOptions.project));
-            cOpt.SetProperty("removeComments", v8engine.CreateValue(CopOptions.removeComments));
-            cOpt.SetProperty("sourceMap", v8engine.CreateValue(CopOptions.sourceMap));
-            cOpt.SetProperty("sourceRoot", v8engine.CreateValue(CopOptions.sourceRoot));
-            cOpt.SetProperty("suppressImplicitAnyIndexErrors", v8engine.CreateValue(CopOptions.suppressImplicitAnyIndexErrors));
-            cOpt.SetProperty("target", v8engine.CreateValue(CopOptions.target));
-            cOpt.SetProperty("version", v8engine.CreateValue(CopOptions.version));
-            cOpt.SetProperty("watch", v8engine.CreateValue(CopOptions.watch));
-            cOpt.SetProperty("stripInternal", v8engine.CreateValue(CopOptions.stripInternal));
+			var cOptHandle = v8engine.CreateObject<V8NativeObject>();
 
-            return cOpt;
+		    cOptHandle.SetProperty("allowNonTsExtensions", v8engine.CreateValue(cOpt.allowNonTsExtensions));
+            cOptHandle.SetProperty("charset", v8engine.CreateValue(cOpt.charset));
+            cOptHandle.SetProperty("codepage", v8engine.CreateValue(cOpt.codepage));
+            cOptHandle.SetProperty("declaration", v8engine.CreateValue(cOpt.declaration));
+            cOptHandle.SetProperty("diagnostics", v8engine.CreateValue(cOpt.diagnostics));
+            cOptHandle.SetProperty("emitBOM", v8engine.CreateValue(cOpt.emitBOM));
+            cOptHandle.SetProperty("help", v8engine.CreateValue(cOpt.help));
+            cOptHandle.SetProperty("listFiles", v8engine.CreateValue(cOpt.listFiles));
+            cOptHandle.SetProperty("locale", v8engine.CreateValue(cOpt.locale));
+            cOptHandle.SetProperty("mapRoot", v8engine.CreateValue(cOpt.mapRoot));
+            cOptHandle.SetProperty("module", v8engine.CreateValue(cOpt.module));
+            cOptHandle.SetProperty("noEmit", v8engine.CreateValue(cOpt.noEmit));
+            cOptHandle.SetProperty("noEmitOnError", v8engine.CreateValue(cOpt.noEmitOnError));
+            cOptHandle.SetProperty("noErrorTruncation", v8engine.CreateValue(cOpt.noErrorTruncation));
+            cOptHandle.SetProperty("noImplicitAny", v8engine.CreateValue(cOpt.noImplicitAny));
+            cOptHandle.SetProperty("noLib", v8engine.CreateValue(cOpt.noLib));
+            cOptHandle.SetProperty("noLibCheck", v8engine.CreateValue(cOpt.noLibCheck));
+            cOptHandle.SetProperty("noResolve", v8engine.CreateValue(cOpt.noResolve));
+            cOptHandle.SetProperty("tsOut", v8engine.CreateValue(cOpt.tsOut));
+            cOptHandle.SetProperty("outDir", v8engine.CreateValue(cOpt.outDir));
+            cOptHandle.SetProperty("preserveConstEnums", v8engine.CreateValue(cOpt.preserveConstEnums));
+            cOptHandle.SetProperty("project", v8engine.CreateValue(cOpt.project));
+            cOptHandle.SetProperty("removeComments", v8engine.CreateValue(cOpt.removeComments));
+            cOptHandle.SetProperty("sourceMap", v8engine.CreateValue(cOpt.sourceMap));
+            cOptHandle.SetProperty("sourceRoot", v8engine.CreateValue(cOpt.sourceRoot));
+            cOptHandle.SetProperty("suppressImplicitAnyIndexErrors", v8engine.CreateValue(cOpt.suppressImplicitAnyIndexErrors));
+            cOptHandle.SetProperty("target", v8engine.CreateValue(cOpt.target));
+            cOptHandle.SetProperty("version", v8engine.CreateValue(cOpt.version));
+            cOptHandle.SetProperty("watch", v8engine.CreateValue(cOpt.watch));
+            cOptHandle.SetProperty("stripInternal", v8engine.CreateValue(cOpt.stripInternal));
+
+            return cOptHandle;
 
         }
 
 
         public InternalHandle getNewLine(){
-            return v8engine.CreateValue(host.getNewLine());
+
+			var lineEnd = host.getNewLine();
+
+			if (lineEnd == null) {
+				return null;
+			}
+
+			return v8engine.CreateValue(lineEnd);
         }
 
 
@@ -75,17 +86,29 @@ namespace TypeScriptLanguageService
 
             var scriptArray = host.getScriptFileNames();
 
+			if (scriptArray == null) {
+				return null;
+			}
+
             InternalHandle[] handleArray = new InternalHandle[scriptArray.Length];
             for (int i = 0; i < scriptArray.Length; i++)
             {
                 handleArray[i] = v8engine.CreateValue(scriptArray[i]);
             }
+
             return handleArray;
         }
 
 
         public InternalHandle getScriptVersion(InternalHandle fileName){
-            return v8engine.CreateValue(host.getScriptVersion(fileName)); 
+
+			var version = host.getScriptVersion(fileName);
+
+			if (version == null) {
+				return null;
+			}
+
+			return v8engine.CreateValue(version); 
         }
 
        
@@ -93,10 +116,14 @@ namespace TypeScriptLanguageService
             // return IScriptSnapshot
             
             var snapshot = host.getScriptSnapshot(fileName);
+
+			if (snapshot == null) {
+				return null;
+			}
+
             var v8Snapshot = new V8ScriptSnapshot(v8engine, snapshot);
-            v8engine.GlobalObject.SetProperty("snapshot", v8Snapshot, null, true, ScriptMemberSecurity.Locked);
-            var snapshotHandle = v8engine.GlobalObject.GetProperty("snapshot");
-            return  snapshotHandle;
+			var v8SnapshotHandle = v8engine.GetTypeBinder(typeof(V8ScriptSnapshot)).CreateObject(v8Snapshot);
+			return v8SnapshotHandle;
 
         }
 
@@ -108,15 +135,21 @@ namespace TypeScriptLanguageService
         //@TODO This callback needs meaning
         public InternalHandle getCancellationToken(){
             var cToken = new V8CancellationToken(v8engine);
-            v8engine.GlobalObject.SetProperty("cToken", cToken, null, true, ScriptMemberSecurity.Locked);
-            var cTokenHandle = v8engine.GlobalObject.GetProperty("cToken");
+			var cTokenHandle = v8engine.GetTypeBinder(typeof(V8CancellationToken)).CreateObject(cToken);
             return  cTokenHandle;
         }
 
 
         //@TODO What they need the dir for???
         public InternalHandle getCurrentDirectory() {
-            return null;
+
+			var cDir = host.getCurrentDirectory();
+
+			if (cDir == null) {
+				return null;
+			}
+
+			return v8engine.CreateValue(cDir);
         }
 
         //@TODO Why do I need the options parameter?, should I mahrsahl  them???
