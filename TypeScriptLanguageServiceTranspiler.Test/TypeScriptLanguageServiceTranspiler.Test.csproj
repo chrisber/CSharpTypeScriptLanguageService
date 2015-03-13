@@ -3,10 +3,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{70FD8A65-4C8F-4FC5-AC72-D0AC845E3794}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>TypeScriptMapping</RootNamespace>
-    <AssemblyName>TypeScriptMapping</AssemblyName>
+    <ProjectGuid>{EFE99181-EA84-478B-AAA3-629CC58EF17F}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>TypeScriptLanguageServiceTranspilerTest</RootNamespace>
+    <AssemblyName>TypeScriptLanguageServiceTranspiler.Test</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -25,14 +25,35 @@
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
+    <Externalconsole>true</Externalconsole>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="V8.Net">
+      <HintPath>..\V8dotnet\linux.x64\V8.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="V8.Net.Proxy.Interface">
+      <HintPath>..\V8dotnet\linux.x64\V8.Net.Proxy.Interface.dll</HintPath>
+    </Reference>
+    <Reference Include="V8.Net.SharedTypes">
+      <HintPath>..\V8dotnet\linux.x64\V8.Net.SharedTypes.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MyClass.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TypeScriptLanguageServiceTranspiler\TypeScriptLanguageServiceTranspiler.csproj">
+      <Project>{B3FF98B1-B867-4D05-BDE6-7B602BEEE9BB}</Project>
+      <Name>TypeScriptLanguageServiceTranspiler</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

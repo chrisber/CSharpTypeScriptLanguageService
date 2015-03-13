@@ -49,16 +49,6 @@
     <Compile Include="TypeScriptServiceHostEnvironment.cs" />
     <Compile Include="Utilities\Utilities.cs" />
     <Compile Include="Transpiler.cs" />
-    <Compile Include="T4Templates\TypescriptTypes.cs">
-      <DependentUpon>TypescriptTypes.tt</DependentUpon>
-    </Compile>
-    <Compile Include="T4Templates\TypeScriptLanguageService.cs">
-      <DependentUpon>TypeScriptLanguageService.tt</DependentUpon>
-    </Compile>
-    <Compile Include="stubs\Utilities.cs" />
-    <Compile Include="stubs\V8CancellationToken.cs" />
-    <Compile Include="stubs\V8ScriptSnapshot.cs" />
-    <Compile Include="stubs\V8TypeScriptServiceHostEnv.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -85,7 +75,6 @@
   <ItemGroup>
     <Folder Include="Utilities\" />
     <Folder Include="T4Templates\" />
-    <Folder Include="stubs\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -93,9 +82,22 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>TypescriptTypes.cs</LastGenOutput>
     </None>
+    <None Include="T4Templates\ITypeScriptLanguageService.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ITypeScriptLanguageService.cs</LastGenOutput>
+    </None>
     <None Include="T4Templates\TypeScriptLanguageService.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>TypeScriptLanguageService.cs</LastGenOutput>
+    </None>
+    <None Include="T4Templates\ITypeScriptLanguageService.cs">
+      <DependentUpon>ITypeScriptLanguageService.tt</DependentUpon>
+    </None>
+    <None Include="T4Templates\TypeScriptLanguageService.cs">
+      <DependentUpon>TypeScriptLanguageService.tt</DependentUpon>
+    </None>
+    <None Include="T4Templates\TypescriptTypes.cs">
+      <DependentUpon>TypescriptTypes.tt</DependentUpon>
     </None>
   </ItemGroup>
 </Project>

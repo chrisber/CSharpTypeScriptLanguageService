@@ -52,6 +52,9 @@
     <Compile Include="V8ScriptSnapshot.cs" />
     <Compile Include="V8CancellationToken.cs" />
     <Compile Include="V8TypeScriptServiceHostEnv.cs" />
+    <Compile Include="..\TypeScriptLanguageServiceTranspiler\T4Templates\ITypeScriptLanguageService.cs">
+      <Link>ITypeScriptLanguageService.cs</Link>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

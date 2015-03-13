@@ -21,6 +21,21 @@ namespace TypeScriptLanguageService
         /// <param name="handle">InternalHandle v8 handle</param>
         /// <typeparam name="T">The 1st type parameter. Needs to have a default constructor</typeparam>
         public T TypeMapper<T>(InternalHandle handle) {
+
+			//if the handle has no result init an empty array or object
+			if (handle == "undefined") {
+				if (typeof(T).IsArray) {
+					var array = Array.CreateInstance(typeof(T).GetElementType(), 0);
+					T generic = Activator.CreateInstance<T>();
+					array.SetValue(generic, 0);
+					T obj = (T)(object)array;
+					return obj;
+				} else {
+					T generic = Activator.CreateInstance<T>();
+					return generic;
+				}
+			}
+
             //@TODO do i need to care about enum parse?
             MethodInfo method = typeof(Utilities).GetMethod("TypeMapper");//@TODO dont call this every time
 
