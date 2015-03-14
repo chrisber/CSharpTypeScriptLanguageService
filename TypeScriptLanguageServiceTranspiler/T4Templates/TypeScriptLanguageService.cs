@@ -29,6 +29,8 @@ namespace TypeScriptLanguageService {
 			v8Engine.GlobalObject.SetProperty(typeof(V8TypeScriptServiceHostEnv), V8PropertyAttributes.Locked, null, true);
             v8Engine.GlobalObject.SetProperty(typeof(V8ScriptSnapshot), V8PropertyAttributes.Locked, null, true);
             v8Engine.GlobalObject.SetProperty(typeof(V8CancellationToken), V8PropertyAttributes.Locked, null, true);
+            v8Engine.GlobalObject.SetProperty(typeof(TextChangeRange), V8PropertyAttributes.Locked, null, true);
+            v8Engine.GlobalObject.SetProperty(typeof(TextSpan), V8PropertyAttributes.Locked, null, true);
 
             this.Host = host;
             this.V8Host = new V8TypeScriptServiceHostEnv(v8Engine,host);
@@ -60,6 +62,7 @@ namespace TypeScriptLanguageService {
 
 		public void  CleanupSemanticCache ( ) {
 				var resultHandle = languageService.Call("cleanupSemanticCache", null );
+                if(resultHandle.IsError){Host.log(resultHandle);}
                 resultHandle.ThrowOnError();
 
 }
@@ -68,6 +71,7 @@ namespace TypeScriptLanguageService {
 
 				Handle fileNameHandle = v8Engine.CreateValue(fileName);
 				var resultHandle = languageService.Call("getSyntacticDiagnostics", null ,fileNameHandle);
+                if(resultHandle.IsError){Host.log(resultHandle);}
                 resultHandle.ThrowOnError();
 
 				var result = utilities.TypeMapper<Diagnostic[]>(resultHandle);
@@ -78,6 +82,7 @@ namespace TypeScriptLanguageService {
 
 				Handle fileNameHandle = v8Engine.CreateValue(fileName);
 				var resultHandle = languageService.Call("getSemanticDiagnostics", null ,fileNameHandle);
+                if(resultHandle.IsError){Host.log(resultHandle);}
                 resultHandle.ThrowOnError();
 
 				var result = utilities.TypeMapper<Diagnostic[]>(resultHandle);
@@ -86,6 +91,7 @@ namespace TypeScriptLanguageService {
 	
 		public Diagnostic[]  GetCompilerOptionsDiagnostics ( ) {
 				var resultHandle = languageService.Call("getCompilerOptionsDiagnostics", null );
+                if(resultHandle.IsError){Host.log(resultHandle);}
                 resultHandle.ThrowOnError();
 
 				var result = utilities.TypeMapper<Diagnostic[]>(resultHandle);
@@ -102,6 +108,7 @@ namespace TypeScriptLanguageService {
 				v8Engine.GlobalObject.SetProperty("textspan", spanHandle);
 
 				var resultHandle = languageService.Call("getSyntacticClassifications", null ,fileNameHandle,spanHandle);
+                if(resultHandle.IsError){Host.log(resultHandle);}
                 resultHandle.ThrowOnError();
 
 				var result = utilities.TypeMapper<ClassifiedSpan[]>(resultHandle);
@@ -118,6 +125,7 @@ namespace TypeScriptLanguageService {
 				v8Engine.GlobalObject.SetProperty("textspan", spanHandle);
 
 				var resultHandle = languageService.Call("getSemanticClassifications", null ,fileNameHandle,spanHandle);
+                if(resultHandle.IsError){Host.log(resultHandle);}
                 resultHandle.ThrowOnError();
 
 				var result = utilities.TypeMapper<ClassifiedSpan[]>(resultHandle);
@@ -130,6 +138,7 @@ namespace TypeScriptLanguageService {
 
 				Handle positionHandle = v8Engine.CreateValue(position);
 				var resultHandle = languageService.Call("getCompletionsAtPosition", null ,fileNameHandle,positionHandle);
+                if(resultHandle.IsError){Host.log(resultHandle);}
                 resultHandle.ThrowOnError();
 
 				var result = utilities.TypeMapper<CompletionInfo>(resultHandle);
@@ -144,6 +153,7 @@ namespace TypeScriptLanguageService {
 
 				Handle entryNameHandle = v8Engine.CreateValue(entryName);
 				var resultHandle = languageService.Call("getCompletionEntryDetails", null ,fileNameHandle,positionHandle,entryNameHandle);
+                if(resultHandle.IsError){Host.log(resultHandle);}
                 resultHandle.ThrowOnError();
 
 				var result = utilities.TypeMapper<CompletionEntryDetails>(resultHandle);
@@ -156,6 +166,7 @@ namespace TypeScriptLanguageService {
 
 				Handle positionHandle = v8Engine.CreateValue(position);
 				var resultHandle = languageService.Call("getQuickInfoAtPosition", null ,fileNameHandle,positionHandle);
+                if(resultHandle.IsError){Host.log(resultHandle);}
                 resultHandle.ThrowOnError();
 
 				var result = utilities.TypeMapper<QuickInfo>(resultHandle);
@@ -170,6 +181,7 @@ namespace TypeScriptLanguageService {
 
 				Handle endPosHandle = v8Engine.CreateValue(endPos);
 				var resultHandle = languageService.Call("getNameOrDottedNameSpan", null ,fileNameHandle,startPosHandle,endPosHandle);
+                if(resultHandle.IsError){Host.log(resultHandle);}
                 resultHandle.ThrowOnError();
 
 				var result = utilities.TypeMapper<TextSpan>(resultHandle);
@@ -182,6 +194,7 @@ namespace TypeScriptLanguageService {
 
 				Handle positionHandle = v8Engine.CreateValue(position);
 				var resultHandle = languageService.Call("getBreakpointStatementAtPosition", null ,fileNameHandle,positionHandle);
+                if(resultHandle.IsError){Host.log(resultHandle);}
                 resultHandle.ThrowOnError();
 
 				var result = utilities.TypeMapper<TextSpan>(resultHandle);
@@ -194,6 +207,7 @@ namespace TypeScriptLanguageService {
 
 				Handle positionHandle = v8Engine.CreateValue(position);
 				var resultHandle = languageService.Call("getSignatureHelpItems", null ,fileNameHandle,positionHandle);
+                if(resultHandle.IsError){Host.log(resultHandle);}
                 resultHandle.ThrowOnError();
 
 				var result = utilities.TypeMapper<SignatureHelpItems>(resultHandle);
@@ -206,6 +220,7 @@ namespace TypeScriptLanguageService {
 
 				Handle positionHandle = v8Engine.CreateValue(position);
 				var resultHandle = languageService.Call("getRenameInfo", null ,fileNameHandle,positionHandle);
+                if(resultHandle.IsError){Host.log(resultHandle);}
                 resultHandle.ThrowOnError();
 
 				var result = utilities.TypeMapper<RenameInfo>(resultHandle);
@@ -222,6 +237,7 @@ namespace TypeScriptLanguageService {
 
 				Handle findInCommentsHandle = v8Engine.CreateValue(findInComments);
 				var resultHandle = languageService.Call("findRenameLocations", null ,fileNameHandle,positionHandle,findInStringsHandle,findInCommentsHandle);
+                if(resultHandle.IsError){Host.log(resultHandle);}
                 resultHandle.ThrowOnError();
 
 				var result = utilities.TypeMapper<RenameLocation[]>(resultHandle);
@@ -234,6 +250,7 @@ namespace TypeScriptLanguageService {
 
 				Handle positionHandle = v8Engine.CreateValue(position);
 				var resultHandle = languageService.Call("getDefinitionAtPosition", null ,fileNameHandle,positionHandle);
+                if(resultHandle.IsError){Host.log(resultHandle);}
                 resultHandle.ThrowOnError();
 
 				var result = utilities.TypeMapper<DefinitionInfo[]>(resultHandle);
@@ -246,6 +263,7 @@ namespace TypeScriptLanguageService {
 
 				Handle positionHandle = v8Engine.CreateValue(position);
 				var resultHandle = languageService.Call("getReferencesAtPosition", null ,fileNameHandle,positionHandle);
+                if(resultHandle.IsError){Host.log(resultHandle);}
                 resultHandle.ThrowOnError();
 
 				var result = utilities.TypeMapper<ReferenceEntry[]>(resultHandle);
@@ -258,6 +276,7 @@ namespace TypeScriptLanguageService {
 
 				Handle positionHandle = v8Engine.CreateValue(position);
 				var resultHandle = languageService.Call("getOccurrencesAtPosition", null ,fileNameHandle,positionHandle);
+                if(resultHandle.IsError){Host.log(resultHandle);}
                 resultHandle.ThrowOnError();
 
 				var result = utilities.TypeMapper<ReferenceEntry[]>(resultHandle);
@@ -270,6 +289,7 @@ namespace TypeScriptLanguageService {
 
 				Handle maxResultCountHandle = v8Engine.CreateValue(maxResultCount);
 				var resultHandle = languageService.Call("getNavigateToItems", null ,searchValueHandle,maxResultCountHandle);
+                if(resultHandle.IsError){Host.log(resultHandle);}
                 resultHandle.ThrowOnError();
 
 				var result = utilities.TypeMapper<NavigateToItem[]>(resultHandle);
@@ -280,6 +300,7 @@ namespace TypeScriptLanguageService {
 
 				Handle fileNameHandle = v8Engine.CreateValue(fileName);
 				var resultHandle = languageService.Call("getNavigationBarItems", null ,fileNameHandle);
+                if(resultHandle.IsError){Host.log(resultHandle);}
                 resultHandle.ThrowOnError();
 
 				var result = utilities.TypeMapper<NavigationBarItem[]>(resultHandle);
@@ -290,6 +311,7 @@ namespace TypeScriptLanguageService {
 
 				Handle fileNameHandle = v8Engine.CreateValue(fileName);
 				var resultHandle = languageService.Call("getOutliningSpans", null ,fileNameHandle);
+                if(resultHandle.IsError){Host.log(resultHandle);}
                 resultHandle.ThrowOnError();
 
 				var result = utilities.TypeMapper<OutliningSpan[]>(resultHandle);
@@ -310,6 +332,7 @@ namespace TypeScriptLanguageService {
 				var descriptorsHandle = v8Engine.CreateArray(array);
 		                v8Engine.GlobalObject.SetProperty("descriptor", descriptorsHandle );
 				var resultHandle = languageService.Call("getTodoComments", null ,fileNameHandle,descriptorsHandle);
+                if(resultHandle.IsError){Host.log(resultHandle);}
                 resultHandle.ThrowOnError();
 
 				var result = utilities.TypeMapper<TodoComment[]>(resultHandle);
@@ -322,6 +345,7 @@ namespace TypeScriptLanguageService {
 
 				Handle positionHandle = v8Engine.CreateValue(position);
 				var resultHandle = languageService.Call("getBraceMatchingAtPosition", null ,fileNameHandle,positionHandle);
+                if(resultHandle.IsError){Host.log(resultHandle);}
                 resultHandle.ThrowOnError();
 
 				var result = utilities.TypeMapper<TextSpan[]>(resultHandle);
@@ -341,6 +365,7 @@ namespace TypeScriptLanguageService {
 				optionsHandle.SetProperty("ConvertTabsToSpaces", v8Engine.CreateValue(options.ConvertTabsToSpaces));
 				v8Engine.GlobalObject.SetProperty("textspan", optionsHandle);
 				var resultHandle = languageService.Call("getIndentationAtPosition", null ,fileNameHandle,positionHandle,optionsHandle);
+                if(resultHandle.IsError){Host.log(resultHandle);}
                 resultHandle.ThrowOnError();
 
 				return resultHandle;
@@ -365,6 +390,7 @@ namespace TypeScriptLanguageService {
 				optionsHandle.SetProperty("PlaceOpenBraceOnNewLineForControlBlocks", v8Engine.CreateValue(options.PlaceOpenBraceOnNewLineForControlBlocks));
 				v8Engine.GlobalObject.SetProperty("textspan", optionsHandle);
 				var resultHandle = languageService.Call("getFormattingEditsForRange", null ,fileNameHandle,startHandle,endHandle,optionsHandle);
+                if(resultHandle.IsError){Host.log(resultHandle);}
                 resultHandle.ThrowOnError();
 
 				var result = utilities.TypeMapper<TextChange[]>(resultHandle);
@@ -386,6 +412,7 @@ namespace TypeScriptLanguageService {
 				optionsHandle.SetProperty("PlaceOpenBraceOnNewLineForControlBlocks", v8Engine.CreateValue(options.PlaceOpenBraceOnNewLineForControlBlocks));
 				v8Engine.GlobalObject.SetProperty("textspan", optionsHandle);
 				var resultHandle = languageService.Call("getFormattingEditsForDocument", null ,fileNameHandle,optionsHandle);
+                if(resultHandle.IsError){Host.log(resultHandle);}
                 resultHandle.ThrowOnError();
 
 				var result = utilities.TypeMapper<TextChange[]>(resultHandle);
@@ -411,6 +438,7 @@ namespace TypeScriptLanguageService {
 				optionsHandle.SetProperty("PlaceOpenBraceOnNewLineForControlBlocks", v8Engine.CreateValue(options.PlaceOpenBraceOnNewLineForControlBlocks));
 				v8Engine.GlobalObject.SetProperty("textspan", optionsHandle);
 				var resultHandle = languageService.Call("getFormattingEditsAfterKeystroke", null ,fileNameHandle,positionHandle,keyHandle,optionsHandle);
+                if(resultHandle.IsError){Host.log(resultHandle);}
                 resultHandle.ThrowOnError();
 
 				var result = utilities.TypeMapper<TextChange[]>(resultHandle);
@@ -421,6 +449,7 @@ namespace TypeScriptLanguageService {
 
 				Handle fileNameHandle = v8Engine.CreateValue(fileName);
 				var resultHandle = languageService.Call("getEmitOutput", null ,fileNameHandle);
+                if(resultHandle.IsError){Host.log(resultHandle);}
                 resultHandle.ThrowOnError();
 
 				var result = utilities.TypeMapper<EmitOutput>(resultHandle);
@@ -429,6 +458,7 @@ namespace TypeScriptLanguageService {
 	
 		public Program  GetProgram ( ) {
 				var resultHandle = languageService.Call("getProgram", null );
+                if(resultHandle.IsError){Host.log(resultHandle);}
                 resultHandle.ThrowOnError();
 
 				return null;
@@ -438,6 +468,7 @@ namespace TypeScriptLanguageService {
 
 				Handle fileNameHandle = v8Engine.CreateValue(fileName);
 				var resultHandle = languageService.Call("getSourceFile", null ,fileNameHandle);
+                if(resultHandle.IsError){Host.log(resultHandle);}
                 resultHandle.ThrowOnError();
 
 				var result = utilities.TypeMapper<SourceFile>(resultHandle);
@@ -446,6 +477,7 @@ namespace TypeScriptLanguageService {
 	
 		public void  Dispose ( ) {
 				var resultHandle = languageService.Call("dispose", null );
+                if(resultHandle.IsError){Host.log(resultHandle);}
                 resultHandle.ThrowOnError();
 
 }

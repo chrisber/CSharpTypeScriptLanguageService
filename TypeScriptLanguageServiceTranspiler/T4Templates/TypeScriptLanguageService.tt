@@ -45,6 +45,8 @@ namespace TypeScriptLanguageService {
 			v8Engine.GlobalObject.SetProperty(typeof(V8TypeScriptServiceHostEnv), V8PropertyAttributes.Locked, null, true);
             v8Engine.GlobalObject.SetProperty(typeof(V8ScriptSnapshot), V8PropertyAttributes.Locked, null, true);
             v8Engine.GlobalObject.SetProperty(typeof(V8CancellationToken), V8PropertyAttributes.Locked, null, true);
+            v8Engine.GlobalObject.SetProperty(typeof(TextChangeRange), V8PropertyAttributes.Locked, null, true);
+            v8Engine.GlobalObject.SetProperty(typeof(TextSpan), V8PropertyAttributes.Locked, null, true);
 
             this.Host = host;
             this.V8Host = new V8TypeScriptServiceHostEnv(v8Engine,host);
@@ -159,6 +161,7 @@ namespace TypeScriptLanguageService {
 			v8MethodSignature = v8MethodSignature.TrimEnd(',');
 #>
 				var resultHandle = languageService.Call(<#=v8MethodSignature#>);
+                if(resultHandle.IsError){Host.log(resultHandle);}
                 resultHandle.ThrowOnError();
 
 <#
