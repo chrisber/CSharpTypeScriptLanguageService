@@ -23,11 +23,12 @@ namespace TypeScriptLanguageService
 			this.source = v8engine.CreateValue((scriptSnapshot as IScriptSnapshotExtension).ScriptSource);
 			this.version = v8engine.CreateValue((scriptSnapshot as IScriptSnapshotExtension).ScriptVersion);
 
-			var positions = (scriptSnapshot as IScriptSnapshotExtension).LineStartPositions;
-			positionsArrayHandle = new InternalHandle[positions.Length];
-			for (int i = 0; i < positions.Length; i++) {
-				positionsArrayHandle[i] = v8engine.CreateValue(positions[i]);
-			}
+			//TODO implement this if needed for detecting chances of a part of a file
+//			var positions = (scriptSnapshot as IScriptSnapshotExtension).LineStartPositions;
+//			positionsArrayHandle = new InternalHandle[positions.Length];
+//			for (int i = 0; i < positions.Length; i++) {
+//				positionsArrayHandle[i] = v8engine.CreateValue(positions[i]);
+//			}
 		}
 
 
