@@ -121,9 +121,12 @@ namespace TypeScriptLanguageService
 				return null;
 			}
 
-            var v8Snapshot = new V8ScriptSnapshot(v8engine, snapshot);
-			var v8SnapshotHandle = v8engine.GetTypeBinder(typeof(V8ScriptSnapshot)).CreateObject(v8Snapshot);
-			return v8SnapshotHandle;
+			var v8Snapshot = new V8ScriptSnapshotAdapter(v8engine, snapshot);
+
+			var guid = Guid.NewGuid().ToString();
+			v8engine.GlobalObject.SetProperty(guid, v8Snapshot);
+			var handle = v8engine.GlobalObject.GetProperty(guid);
+			return handle;
 
         }
 
