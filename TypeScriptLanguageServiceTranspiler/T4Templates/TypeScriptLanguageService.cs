@@ -483,6 +483,9 @@ namespace TypeScriptLanguageService {
 
 }
 	
+		public  void _dispose(){
+			this.v8Engine.Dispose();
+		}
 
 		/*Helper Functions*/
 
