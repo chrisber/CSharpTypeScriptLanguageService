@@ -121,7 +121,7 @@ namespace TypeScriptLanguageService
 				return null;
 			}
 
-			var v8Snapshot = new V8ScriptSnapshotAdapter(v8engine, snapshot);
+var v8Snapshot = new V8ScriptSnapshotAdapter(v8engine, snapshot,fileName);
 
 			var guid = Guid.NewGuid().ToString();
 			v8engine.GlobalObject.SetProperty(guid, v8Snapshot);
