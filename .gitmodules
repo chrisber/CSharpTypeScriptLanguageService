@@ -1,6 +1,6 @@
 [submodule "TypeScriptLanguageServiceGenerator/TypeScript"]
 	path = TypeScriptLanguageServiceGenerator/TypeScript
-	url = git@github.com:Microsoft/TypeScript.git
+	url = https://github.com/Microsoft/TypeScript.git
 [submodule "TypeScript"]
 	path = TypeScript
-	url = git@github.com:Microsoft/TypeScript.git
+	url = https://github.com/Microsoft/TypeScript.git
