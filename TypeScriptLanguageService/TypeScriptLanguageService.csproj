@@ -8,6 +8,8 @@
     <RootNamespace>TypeScriptLanguageService</RootNamespace>
     <AssemblyName>TypeScriptLanguageService</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -18,6 +20,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -29,18 +32,18 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="V8.Net">
-      <HintPath>..\V8dotnet\linux.x64\V8.Net.dll</HintPath>
-    </Reference>
-    <Reference Include="V8.Net.Proxy.Interface">
-      <HintPath>..\V8dotnet\linux.x64\V8.Net.Proxy.Interface.dll</HintPath>
-    </Reference>
-    <Reference Include="V8.Net.SharedTypes">
-      <HintPath>..\V8dotnet\linux.x64\V8.Net.SharedTypes.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="V8.Net">
+      <HintPath>..\V8dotnet\v8dotnet_all_env\V8.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="V8.Net.Proxy.Interface">
+      <HintPath>..\V8dotnet\v8dotnet_all_env\V8.Net.Proxy.Interface.dll</HintPath>
+    </Reference>
+    <Reference Include="V8.Net.SharedTypes">
+      <HintPath>..\V8dotnet\v8dotnet_all_env\V8.Net.SharedTypes.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -61,12 +64,6 @@
     <Compile Include="IScriptSnapshotExtension.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <Content Include="..\V8dotnet\linux.x64\libV8_Net_Proxy.so">
-      <Link>libV8_Net_Proxy.so</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>
       <Properties>
@@ -79,5 +76,47 @@
   </ProjectExtensions>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="..\V8dotnet\v8dotnet_all_env\v8-ia32.dll">
+      <Link>v8-ia32.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="liblinux\" />
+    <Folder Include="libosx\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\V8dotnet\v8dotnet_all_env\msvcp110.dll">
+      <Link>msvcp110.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\V8dotnet\v8dotnet_all_env\msvcr110.dll">
+      <Link>msvcr110.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\V8dotnet\v8dotnet_all_env\V8.Net.Proxy.Interface.dll.config">
+      <Link>V8.Net.Proxy.Interface.dll.config</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\V8dotnet\v8dotnet_all_env\V8_Net_Proxy.dll">
+      <Link>V8_Net_Proxy.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\V8dotnet\v8dotnet_all_env\vccorlib110.dll">
+      <Link>vccorlib110.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\V8dotnet\v8dotnet_all_env\liblinux\x64\libV8_Net_Proxy.so">
+      <Link>liblinux\x64\libV8_Net_Proxy.so</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\V8dotnet\v8dotnet_all_env\liblinux\x86\libV8_Net_Proxy.so">
+      <Link>liblinux\x86\libV8_Net_Proxy.so</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\V8dotnet\v8dotnet_all_env\libosx\x86\libV8_Net_Proxy.dylib">
+      <Link>libosx\x86\libV8_Net_Proxy.dylib</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>
